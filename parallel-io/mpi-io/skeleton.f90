@@ -1,4 +1,4 @@
-program pario
+program mpiio
   use mpi
   use, intrinsic :: iso_fortran_env, only : error_unit, output_unit
   implicit none
@@ -39,11 +39,11 @@ contains
     integer(kind=MPI_OFFSET_KIND) :: offset;
 
     call mpi_type_size(MPI_INTEGER, dsize, rc)
-    
+
     ! TODO: write the output file "mpiio.dat" using MPI IO. Each
     !       rank should write their own local vectors to correct
     !       locations in the output file.
 
   end subroutine mpiio_writer
 
-end program pario
+end program mpiio
