@@ -1,25 +1,16 @@
-program hybridhello
-  use omp_lib
-  implicit none
-  include 'mpif.h'
-  integer :: provided, my_id, ntask, tid, rc
+program hello
+    use omp_lib
+    use mpi
+    implicit none
+    integer :: my_id, tid, rc
+    integer :: provided, required=MPI_THREAD_FUNNELED
 
-  ! TODO: Initialize MPI with thread support. Investigate different
-  ! thread support levels
+    ! TODO: Initialize MPI with thread support.
 
-  if (provided == MPI_THREAD_MULTIPLE) then
-     write(*,*) 'MPI library supports MPI_THREAD_MULTIPLE'
-  else if (provided == MPI_THREAD_SERIALIZED) then
-     write(*,*) 'MPI library supports MPI_THREAD_SERIALIZED'
-  else if (provided == MPI_THREAD_FUNNELED) then
-     write(*,*) 'MPI library supports MPI_THREAD_FUNNELED'
-  else
-     write(*,*) 'No multithreading support'
-  end if
+    ! TODO: Find out the MPI rank and thread ID of each thread and print
+    !       out the results.
 
-  ! TODO: Find out the number of MPI tasks, MPI rank, and thread id,
-  ! and print out the results
+    ! TODO: Investigate the provided thread support level.
 
-  call MPI_Finalize(rc)
-
-end program hybridhello
+    call MPI_Finalize(rc)
+end program hello

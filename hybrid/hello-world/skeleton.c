@@ -1,32 +1,18 @@
-#include <stdlib.h>
 #include <stdio.h>
-#include <omp.h>
 #include <mpi.h>
-
+#include <omp.h>
 
 int main(int argc, char *argv[])
 {
-    int provided, rank, ntasks;
-    int tid;
+    int my_id, omp_rank;
+    int provided, required=MPI_THREAD_FUNNELED;
 
-    /* TODO: Initialize MPI with thread support. Investigate different
-     * thread support levels */
+    /* TODO: Initialize MPI with thread support. */
 
-    /* Check the thread support level */
-    if (provided == MPI_THREAD_MULTIPLE) {
-        printf("MPI library supports MPI_THREAD_MULTIPLE\n");
-    } else if (provided == MPI_THREAD_SERIALIZED) {
-        printf("MPI library supports MPI_THREAD_SERIALIZED\n");
-    } else if (provided == MPI_THREAD_FUNNELED) {
-        printf("MPI library supports MPI_THREAD_FUNNELED\n");
-    } else {
-        printf("No multithreading support\n");
-    }
-    
+    /* TODO: Find out the MPI rank and thread ID of each thread and print
+     *       out the results. */
 
-    /* TODO: Find out the number of MPI tasks, MPI rank, and thread id,
-     * and print out the results */
-
+    /* TODO: Investigate the provided thread support level. */
 
     MPI_Finalize();
     return 0;
