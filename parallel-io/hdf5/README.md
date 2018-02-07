@@ -1,8 +1,11 @@
 ## HDF5 example
 
-Study the HDF5 example at `parallel-io/hdf5`  where the case of Exercise “Simple
-MPI I/O”  is written with HDF5 using collective parallel write. On Sisu, you
-will need to load the module cray-hdf5-parallel before compilation:
+Study and test the HDF5 examples ([hdf5.c](hdf5.c) or [hdf5.f90](hdf5.f90))
+where the [Simple MPI-IO exercise](../mpi-io) has been re-written with HDF5
+using collective parallel write.
+
+On Sisu, you will need to load the module `cray-hdf5-parallel` before you can
+compile the code:
 
 ```
 module load cray-hdf5-parallel
