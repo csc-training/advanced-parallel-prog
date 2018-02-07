@@ -33,4 +33,4 @@ Programming". The course is part of PRACE Advanced Training Center
  - [Parallel I/O with Posix](parallel-io/posix)
  - [Simple MPI-IO](parallel-io/mpi-io)
  - [HDF5 example](parallel-io/hdf5)
- - [Bonus: Checkpoint/restart with MPI-IO](parallel-io/heat-restart)
+ - [Bonus: Checkpoint + restart with MPI-IO](parallel-io/heat-restart)
