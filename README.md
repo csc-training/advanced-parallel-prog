@@ -22,7 +22,7 @@ Programming". The course is part of PRACE Advanced Training Center
 
 ### Advanced MPI
 
- - [Cartesian process topology](mpi/cartesian-grid)
+ - [Cartesian grid process topology](mpi/cartesian-grid)
  - [Datatype for a struct / derived type](mpi/struct-datatype)
  - [2D-decomposed heat equation](mpi/heat-2d)
  - [One-sided communication in message chain](mpi/message-chain-one-sided)
@@ -32,5 +32,5 @@ Programming". The course is part of PRACE Advanced Training Center
 
  - [Parallel I/O with Posix](parallel-io/posix)
  - [Simple MPI-IO](parallel-io/mpi-io)
- - [HDF5](parallel-io/hdf5)
+ - [HDF5 example](parallel-io/hdf5)
  - [Bonus: Checkpoint/restart with MPI-IO](parallel-io/heat-restart)
