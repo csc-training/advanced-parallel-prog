@@ -28,12 +28,9 @@ Programming". The course is part of PRACE Advanced Training Center
  - [One-sided communication in message chain](mpi/message-chain-one-sided)
  - [One-sided communication in the heat equation solver](mpi/heat-one-sided)
 
-### Paralle I/O
+### Parallel I/O
 
  - [Parallel I/O with Posix](parallel-io/posix)
- - [Simple MPI I/O](parallel-io/mpi-io)
+ - [Simple MPI-IO](parallel-io/mpi-io)
  - [HDF5](parallel-io/hdf5)
- - [Bonus: Checkpoint/restart with MPI I/O](parallel-io/heat-restart)
-
- 
-
+ - [Bonus: Checkpoint/restart with MPI-IO](parallel-io/heat-restart)
