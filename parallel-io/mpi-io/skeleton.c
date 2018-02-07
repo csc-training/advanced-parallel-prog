@@ -51,7 +51,7 @@ void mpiio_writer(int my_id, int *localvector, int localsize)
     MPI_File fh;
     MPI_Offset offset;
 
-    /* TODO: Write the data to  an output file "mpiio.dat" using MPI IO. Each
+    /* TODO: Write the data to an output file "output.dat" using MPI IO. Each
              process should write their own local vectors to correct location
              of the output file. */
 }

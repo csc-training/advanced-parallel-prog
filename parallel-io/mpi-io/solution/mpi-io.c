@@ -51,7 +51,7 @@ void mpiio_writer(int my_id, int *localvector, int localsize)
     MPI_File fh;
     MPI_Offset offset;
 
-    MPI_File_open(MPI_COMM_WORLD, "mpiio.dat",
+    MPI_File_open(MPI_COMM_WORLD, "output.dat",
                   MPI_MODE_CREATE | MPI_MODE_WRONLY, MPI_INFO_NULL, &fh);
 
     offset = my_id * localsize * sizeof(int);

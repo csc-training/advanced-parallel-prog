@@ -40,7 +40,7 @@ contains
 
     call mpi_type_size(MPI_INTEGER, dsize, rc)
 
-    ! TODO: write the output file "mpiio.dat" using MPI IO. Each
+    ! TODO: write the output file "output.dat" using MPI IO. Each
     !       rank should write their own local vectors to correct
     !       locations in the output file.
 
