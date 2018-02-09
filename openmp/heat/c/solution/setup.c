@@ -32,36 +32,33 @@ void initialize(int argc, char* argv[], field *current,
 
     *nsteps = NSTEPS;
 
-#pragma omp single
-    {
-        switch (argc) {
-        case 1:
-            /* Use default values */
-            break;
-        case 2:
-            /* Read initial field from a file */
-            strncpy(input_file, argv[1], 64);
-            read_file = 1;
-            break;
-        case 3:
-            /* Read initial field from a file */
-            strncpy(input_file, argv[1], 64);
-            read_file = 1;
+    switch (argc) {
+    case 1:
+        /* Use default values */
+        break;
+    case 2:
+        /* Read initial field from a file */
+        strncpy(input_file, argv[1], 64);
+        read_file = 1;
+        break;
+    case 3:
+        /* Read initial field from a file */
+        strncpy(input_file, argv[1], 64);
+        read_file = 1;
 
-            /* Number of time steps */
-            *nsteps = atoi(argv[2]);
-            break;
-        case 4:
-            /* Field dimensions */
-            rows = atoi(argv[1]);
-            cols = atoi(argv[2]);
-            /* Number of time steps */
-            *nsteps = atoi(argv[3]);
-            break;
-        default:
-            printf("Unsupported number of command line arguments\n");
-            exit(-1);
-        }
+        /* Number of time steps */
+        *nsteps = atoi(argv[2]);
+        break;
+    case 4:
+        /* Field dimensions */
+        rows = atoi(argv[1]);
+        cols = atoi(argv[2]);
+        /* Number of time steps */
+        *nsteps = atoi(argv[3]);
+        break;
+    default:
+        printf("Unsupported number of command line arguments\n");
+        exit(-1);
     }
 
     if (read_file)
