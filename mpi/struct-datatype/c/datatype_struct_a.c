@@ -45,14 +45,14 @@ int main(int argc, char *argv[])
   } else if (myid == 1) {
     for (i=0; i < reps; i++)
       MPI_Recv(particles, n, particletype, 0, i, MPI_COMM_WORLD,
-	       MPI_STATUS_IGNORE);
+               MPI_STATUS_IGNORE);
   }
   t2 = MPI_Wtime();
 
   printf("Time: %i, %e \n", myid, (t2-t1)/(double)reps);
   printf("Check: %i: %s %f %f %f \n", myid, particles[n-1].label,
-	 particles[n-1].coords[0], particles[n-1].coords[1],
-	 particles[n-1].coords[2]);
+          particles[n-1].coords[0], particles[n-1].coords[1],
+          particles[n-1].coords[2]);
 
   MPI_Finalize();
   return 0;

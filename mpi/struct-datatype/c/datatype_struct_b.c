@@ -44,8 +44,9 @@ int main(int argc, char *argv[])
   t2 = MPI_Wtime();
 
   printf("Time: %i, %e \n", myid, (t2-t1)/(double)reps);
-  printf("Check: %i, %f %f %f\n", myid, particles[n-1].coords[0],
-	 particles[n-1].coords[1], particles[n-1].coords[2]);
+  printf("Check: %i: %s %f %f %f \n", myid, particles[n-1].label,
+          particles[n-1].coords[0], particles[n-1].coords[1],
+          particles[n-1].coords[2]);
 
   MPI_Finalize();
   return 0;

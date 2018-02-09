@@ -31,7 +31,7 @@ int main(int argc, char *argv[])
       strcpy(particles[i].label, "Xe");
     }
   }
-  /* TODO: define the datatype for the struct particle */
+  /* define the datatype for the struct particle */
   types[0]=MPI_FLOAT;
   types[1]=MPI_INT;
   types[2]=MPI_CHAR;
@@ -47,7 +47,7 @@ int main(int argc, char *argv[])
   MPI_Type_create_struct(cnt, blocklen, disp, types, &particletype);
   MPI_Type_commit(&particletype);
 
-  /* TODO: check extent (not really necessary on most platforms) */
+  /* check extent (not really necessary on most platforms) */
   MPI_Type_get_extent(particletype, &lb, &extent);
   MPI_Get_address(&particles[0], &dist[0]);
   MPI_Get_address(&particles[1], &dist[1]);
@@ -68,14 +68,14 @@ int main(int argc, char *argv[])
   } else if (myid == 1) {
     for (i=0; i < reps; i++)
       MPI_Recv(particles, n, particletype, 0, i, MPI_COMM_WORLD,
-	       MPI_STATUS_IGNORE);
+               MPI_STATUS_IGNORE);
   }
   t2 = MPI_Wtime();
 
   printf("Time: %i, %e \n", myid, (t2-t1)/(double)reps);
   printf("Check: %i: %s %f %f %f \n", myid, particles[n-1].label,
-	 particles[n-1].coords[0], particles[n-1].coords[1],
-	 particles[n-1].coords[2]);
+          particles[n-1].coords[0], particles[n-1].coords[1],
+          particles[n-1].coords[2]);
 
   MPI_Finalize();
   return 0;
