@@ -1,4 +1,4 @@
-program mpiio
+program pario
   use mpi
   use, intrinsic :: iso_fortran_env, only : error_unit, output_unit
   implicit none
@@ -6,6 +6,7 @@ program mpiio
   integer, parameter :: datasize = 64, writer_id = 0
   integer :: rc, my_id, ntasks, localsize, i
   integer, dimension(:), allocatable :: localvector
+  integer, dimension(datasize) :: fullvector
 
   call mpi_init(rc)
   call mpi_comm_size(mpi_comm_world, ntasks, rc)
@@ -26,24 +27,26 @@ program mpiio
 
   localvector = [(i + my_id * localsize, i=1,localsize)]
 
-  call mpiio_writer()
+  call single_writer()
 
   deallocate(localvector)
   call mpi_finalize(rc)
 
 contains
 
-  subroutine mpiio_writer()
+  subroutine single_writer()
     implicit none
-    integer :: fh, rc, dsize
-    integer(kind=MPI_OFFSET_KIND) :: offset;
 
-    call mpi_type_size(MPI_INTEGER, dsize, rc)
+    call mpi_gather(localvector, localsize, mpi_integer, fullvector, &
+         & localsize, mpi_integer, writer_id, mpi_comm_world, rc)
+    if (my_id == writer_id) then
+      open(10, file='singlewriter.dat', status='replace', form='unformatted', &
+           & access='stream')
+      write(10, pos=1) fullvector
+      close (10)
+      write(output_unit,'(A,I0,A)') 'Wrote ', size(fullvector), &
+           & ' elements to file singlewriter.dat'
+    end if
+  end subroutine single_writer
 
-    ! TODO: write the output file "output.dat" using MPI IO. Each
-    !       rank should write their own local vectors to correct
-    !       locations in the output file.
-
-  end subroutine mpiio_writer
-
-end program mpiio
+end program pario

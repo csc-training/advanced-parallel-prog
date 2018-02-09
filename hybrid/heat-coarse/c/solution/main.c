@@ -56,7 +56,7 @@ int main(int argc, char **argv)
     start_clock = MPI_Wtime();
 
     /* Time evolve */
-    for (iter = 1; iter < nsteps; iter++) {
+    for (iter = 1; iter <= nsteps; iter++) {
         exchange(&previous, &parallelization, thread_id);
         evolve(&current, &previous, a, dt);
         if (iter % image_interval == 0) {

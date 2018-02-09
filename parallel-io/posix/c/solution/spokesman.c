@@ -7,7 +7,7 @@
 #define DATASIZE   64
 #define WRITER_ID   0
 
-void mpiio_writer(int, int *, int);
+void single_writer(int, int *, int);
 
 
 int main(int argc, char *argv[])
@@ -38,7 +38,7 @@ int main(int argc, char *argv[])
         localvector[i] = i + 1 + localsize * my_id;
     }
 
-    mpiio_writer(my_id, localvector, localsize);
+    single_writer(my_id, localvector, localsize);
 
     free(localvector);
 
@@ -46,12 +46,27 @@ int main(int argc, char *argv[])
     return 0;
 }
 
-void mpiio_writer(int my_id, int *localvector, int localsize)
+void single_writer(int my_id, int *localvector, int localsize)
 {
-    MPI_File fh;
-    MPI_Offset offset;
+    FILE *fp;
+    int *fullvector;
 
-    /* TODO: Write the data to an output file "output.dat" using MPI IO. Each
-             process should write their own local vectors to correct location
-             of the output file. */
+    fullvector = (int *) malloc(DATASIZE * sizeof(int));
+
+    MPI_Gather(localvector, localsize, MPI_INT, fullvector, localsize,
+               MPI_INT, WRITER_ID, MPI_COMM_WORLD);
+
+    if (my_id == WRITER_ID) {
+        if ((fp = fopen("singlewriter.dat", "wb")) == NULL) {
+            fprintf(stderr, "Error: %d (%s)\n", errno, strerror(errno));
+            MPI_Abort(MPI_COMM_WORLD, EXIT_FAILURE);
+        } else {
+            fwrite(fullvector, sizeof(int), DATASIZE, fp);
+            fclose(fp);
+            printf("Wrote %d elements to file singlewriter.dat\n", DATASIZE);
+        }
+    }
+
+    free(fullvector);
 }
+

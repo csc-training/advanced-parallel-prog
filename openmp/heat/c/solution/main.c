@@ -43,7 +43,7 @@ int main(int argc, char **argv)
     }
 
     /* Time evolve */
-    for (iter = 1; iter < nsteps; iter++) {
+    for (iter = 1; iter <= nsteps; iter++) {
         evolve(&current, &previous, a, dt);
         if (iter % image_interval == 0) {
 #pragma omp single

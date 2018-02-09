@@ -43,10 +43,10 @@ int main(int argc, char **argv)
     start_clock = MPI_Wtime();
 
     /* Time evolve */
-    for (iter = 1; iter < nsteps; iter++) {
+    for (iter = 1; iter <= nsteps; iter++) {
         exchange(&previous, &parallelization);
         evolve(&current, &previous, a, dt);
-        if (iter % image_interval == 0) {
+        if (iter % image_interval == 0 || iter == nsteps) {
           write_field(&current, iter, &parallelization);
         }
         /* Swap current field so that it will be used

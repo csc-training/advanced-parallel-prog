@@ -14,7 +14,7 @@ contains
     integer, intent(out) :: nsteps
     type(parallel_data), intent(out) :: parallel
 
-    integer :: rows, cols, step0
+    integer :: rows, cols, start
     logical :: using_input_file, restart
     character(len=85) :: input_file, arg  ! Input file name and command line arguments
 
@@ -52,10 +52,10 @@ contains
     ! Check if checkpoint exists
     inquire (file="HEAT_RESTART.dat", exist=restart)
     if (restart) then
-        call read_restart(previous, parallel, step0)
+        call read_restart(previous, parallel, start)
         if (parallel % rank == 0) then
             write(*,'(a)') 'Restarting from an earlier checkpoint'
-            write(*,'(a,i0)') '  saved at iteration', step0
+            write(*,'(a,i0)') '  saved at iteration ', start
         end if
         call copy_fields(previous, current)
     else if (using_input_file) then

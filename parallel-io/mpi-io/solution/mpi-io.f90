@@ -42,7 +42,7 @@ contains
 
     offset = my_id * localsize * dsize
 
-    call mpi_file_open(MPI_COMM_WORLD, 'mpiio.dat', &
+    call mpi_file_open(MPI_COMM_WORLD, 'output.dat', &
          & MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, rc)
     call mpi_file_write_at_all(fh, offset, localvector, localsize, &
          & MPI_INTEGER, MPI_STATUS_IGNORE, rc)
