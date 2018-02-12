@@ -6,7 +6,7 @@
 #include <assert.h>
 
 #include "heat.h"
-#include "../../common/pngwriter.h"
+#include "../common/pngwriter.h"
 
 #define NSTEPS 500  // Default number of iteration steps
 
