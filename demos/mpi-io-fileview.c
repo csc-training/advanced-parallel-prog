@@ -49,7 +49,7 @@ int main(int argc, char *argv[])
     int starts[2] = {coords[0] * localsize, coords[1] * localsize};
     MPI_Type_create_subarray(2, sizes, subsizes, starts, MPI_ORDER_C, MPI_INT, &filetype);
     MPI_Type_commit(&filetype);
-    MPI_File_set_view(fh, offset, MPI_INT, filetype, "internal", MPI_INFO_NULL);
+    MPI_File_set_view(fh, offset, MPI_INT, filetype, "native", MPI_INFO_NULL);
 
     // Write using the file view
     MPI_File_write_at_all(fh, offset, localarray,
