@@ -1,0 +1,250 @@
+---
+title:  One-sided communication
+author: CSC Training
+date:   2019-02
+lang:   en
+---
+
+
+# One-sided communication
+
+Two components of message-passing: sending and receiving
+
+  - Sends and receives need to match
+
+One-sided communication:
+
+  - Only single process calls data movement functions - remote memory
+    access (RMA)
+  - Communication patterns specified by only a single process
+  - Always non-blocking
+
+
+# Why one-sided communication?
+
+Certain algorithms featuring irregular and/or dynamic communication
+patterns easier to implement
+
+  - A priori information of sends and receives is not needed
+
+Potentially reduced overhead and improved scalability
+
+Hardware support for remote memory access has been restored in most
+current-generation architectures
+
+
+# Origin and target
+
+Key terms of one-sided communication
+
+  - Origin process: a process which calls data movement function
+  - Target process: a process whose memory is accessed
+
+
+# Remote memory access window
+
+  - Window  is a region in process's memory which is made available
+    for remote operations
+  - Windows are created by collective calls
+  - Windows may be different in different processes
+
+FIXME: missing figure
+
+
+# Data movement operations
+
+PUT data to the memory in target process
+
+  - From local buffer in origin to the window in target
+
+GET  data from the memory of target process
+
+  - From the window in target to the local buffer in origin
+
+ACCUMULATE data in target process
+
+  - Use local buffer in origin and update the data (e.g. add the data
+    from origin) in the window of the target
+  - One-sided reduction
+
+
+# Synchronization
+
+Communication takes place within *epoch*s
+
+  - Synchronization calls start and end an *epoch*
+  - There can be multiple data movement calls within epoch
+  - An epoch  is specific to particular window
+
+Active synchronization:
+
+  - Both origin and target perform synchronization calls
+
+Passive synchronization:
+
+  - No MPI calls at target process
+
+
+# One-sided communication in a nutshell
+
+Define memory window
+
+Start an epoch
+
+  - Target: exposure epoch
+  - Origin: access epoch
+
+GET, PUT, and/or ACCUMULATE data
+
+Complete the communications by ending the epoch
+
+FIXME: missing figure?
+
+
+# Key MPI functions for ONE-sided communication
+
+FIXME: pseudo code
+
+- Creating an window
+MPI_Win_create(base, size, disp_unit, info, comm, win)
+base (pointer to) local memory to expose for RMA size size of a window in bytes disp_unit local unit size for displacements in bytes info hints for implementation comm communicator
+win handle to window
+  - The window object is deallocated with
+
+- Starting and ending an epoch
+MPI_Win_fence(assert, win) assert optimize for specific usage. Valid values are ”0”, MPI_MODE_NOSTORE, MPI_MODE_NOPUT, MPI_MODE_NOPRECEDE, MPI_MODE_NOSUCCEED win window handle
+Used both for starting and ending an epoch
+  - Should both precede and follow data movement calls
+  - Collective, barrier-like operation
+
+- Data movement: Put
+MPI_Put(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, win) origin (pointer to) local data to be sent to target origin_count number of elements to put origin_datatype MPI datatype for local data target_rank rank of the target task target_disp starting point in target window target_count number of elements in target
+target_datatype MPI datatype for remote data win RMA window
+
+- Data movement: Get
+MPI_Get(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, win) origin (pointer to) local buffer in which to receive the data origin_count number of elements to get origin_datatype MPI datatype for local data target_rank rank of the target task target_disp starting point in target window target_count number of elements from target
+target_datatype MPI datatype for remote data win RMA window
+
+- Data movement: Accumulate
+MPI_Accumulate(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, op, win) origin (pointer to) local data to be accumulated origin_count number of elements to put origin_datatype MPI datatype for local data target_rank rank of the target task target_disp starting point in target window target_count number of elements for target
+target_datatype MPI datatype for remote data op accumulation operation (as in MPI_Reduce)
+win RMA window
+
+
+# Simple example: Put
+
+```c
+...
+
+int data;
+MPI_Win window;
+
+...
+
+data = rank;
+// Create window
+MPI_Win_create(&data, sizeof(int), sizeof(int), MPI_INFO_NULL,
+               MPI_COMM_WORLD, &window);
+
+...
+
+MPI_Win_fence(0, window);
+
+if (rank == 0)
+    MPI_Put(&data, 1, MPI_INT, 1, 0, 1, MPI_INT, window);
+
+MPI_Win_fence(0, window);
+
+...
+
+MPI_Win_free(&window);
+```
+
+
+# Limitations for data access
+
+  - Compatibility of local and remote operations when multiple processes
+    access a window during an epoch
+
+FIXME: missing table
+
+
+# Advanced synchronization
+
+  - Assert arguments in MPI_Win_fence: MPI_MODE_NOSTORE The local
+    window was not updated by local stores (or local get or receive
+    calls) since last synchronization MPI_MODE_NOPUT The local window
+    will not be updated by put or accumulate calls after the fence call,
+    until the ensuing (fence) synchronization MPI_MODE_NOPRECEDE The
+    fence does not complete any sequence of locally issued RMA calls
+    MPI_MODE_NOSUCCEED The fence does not start any sequence of
+    locally issued RMA calls
+
+
+# Advanced synchronization
+
+More control on epochs can be obtained by starting and ending the
+exposure and access epochs separately
+
+Target: Exposure epoch
+
+  - Start: MPI_Win_post
+  - End: MPI_Win_wait
+
+Origin: Access epoch
+
+  - Start: MPI_Win_start
+  - End: MPI_Win_compete
+
+
+# Enhancements in MPI-3
+
+New window creation function: MPI_Win_allocate
+
+  - Allocate memory and create window at the same time
+
+Dynamic windows: MPI_Win_create_dynamic, MPI_Win_attach,
+MPI_Win_detach
+
+  - Non-collective exposure of memory
+
+
+# Enhancements in MPI-3
+
+New data movement operations: MPI_Get_accumulate, MPI_Fetch_and_op,
+MPI_Compare_and_swap
+
+New memory model MPI_Win_allocate_shared
+
+  - Allocate memory which is shared between MPI tasks
+
+Enhancements for passive target synchronization
+
+
+# Performance considerations
+
+  - Performance of the one-sided approach is highly
+    implementation-dependent
+  - Maximize the amount of operations within an epoch
+  - Provide the assert parameters for MPI_Win_fence
+
+
+# OSU benchmark example
+
+FIXME: missing figure
+
+
+# Summary
+
+One-sided communication allows communication patterns to be specified
+from a single process
+
+Can reduce synchronization overheads and provide better performance
+especially on recent hardware
+
+Basic concepts:
+
+  - Origin and target process
+  - Creation of the memory window
+  - Communication epoch
+  - Data movement operations
