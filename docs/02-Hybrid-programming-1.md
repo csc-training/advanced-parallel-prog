@@ -126,28 +126,19 @@ FIXME: missing figure
 # Thread safe initialization
 
 `MPI_Init_thread(required, provided)`
-
-  : `argc`, `argv`
+  : `argc` {.input}, `argv` {.input}
     : Command line arguments in C
-
-  : `required`
+  : `required` {.input}
     : Required thread safety level
-
-  : `provided`
+  : `provided` {.output}
     : Supported thread safety level
-
-  : `error`
+  : `error` {.output}
     : Error value; in C/C++ it's the return value of the function,
       and in Fortran an additional output parameter
-
-
-# Thread safe initialization
 
 - Pre-defined integer constants:
   ```
   MPI_THREAD_SINGLE < MPI_THREAD_FUNNELED < MPI_THREAD_SERIALIZED
-  ```
-  ```
   < MPI_THREAD_MULTIPLE
   ```
 
