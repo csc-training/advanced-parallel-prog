@@ -8,6 +8,8 @@ lang:   en
 
 # Processes and threads
 
+![](img/processes-threads.svg){width=100%}
+
 <div class="column">
 ## Process
 
@@ -25,6 +27,8 @@ lang:   en
 
 
 # Processes and threads
+
+![](img/processes-threads.svg){width=80%}
 
 <div class="column">
 ## Process
@@ -65,14 +69,17 @@ lang:   en
 
 # Hybrid programming
 
+<div class="column">
   - Shared memory programming inside a node, message passing between
     nodes
   - Matches well modern supercomputer hardware
   - Often one MPI task / socket, but one should experiment with the
     ratio
+</div>
 
-FIXME: missing figure
-
+<div class="column">
+![](img/supercomputer-node-hybrid.svg){width=100%}
+</div>
 
 # Example: Hybrid hello
 
@@ -120,8 +127,7 @@ I'm thread 2 in process 0
 
 # Thread support in MPI
 
-FIXME: missing figure
-
+![](img/mpi-thread-support.svg){width=100%}
 
 # Thread safe initialization
 
