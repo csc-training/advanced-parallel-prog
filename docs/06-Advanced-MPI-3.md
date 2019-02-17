@@ -45,7 +45,7 @@ lang:   en
 - Windows are created by collective calls
 - Windows may be different in different processes
 
-FIXME: missing figure
+![](img/one-sided-window.svg){width=40%}
 
 
 # Data movement operations
@@ -74,15 +74,18 @@ FIXME: missing figure
 
 # One-sided communication in a nutshell
 
+<div class="column">
 - Define memory window
 - Start an epoch
     - Target: exposure epoch
     - Origin: access epoch
 - GET, PUT, and/or ACCUMULATE data
 - Complete the communications by ending the epoch
+</div>
 
-FIXME: missing figure?
-
+<div class="column">
+![](img/one-sided-epoch.svg){width=70%}
+</div>
 
 # Key MPI functions for ONE-sided communication {.section}
 
@@ -240,7 +243,7 @@ MPI_Win_free(&window);
 - Compatibility of local and remote operations when multiple processes
   access a window during an epoch
 
-FIXME: missing table
+![](img/one-sided-limitations.svg){width=70%}
 
 
 # Advanced synchronization:
