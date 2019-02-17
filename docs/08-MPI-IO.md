@@ -195,7 +195,7 @@ FIXME: missing function definition
 - Wait for completion using `MPI_Test`, `MPI_Wait`, etc.
 - Can be used to overlap I/O with computation:
 
-FIXME: missing figure
+![](img/nonblocking-io.svg){width=70%}
 
 
 # Non-contiguous data access with MPI-IO {.section}
@@ -243,15 +243,18 @@ FIXME: missing figure
 
 # File view for non-contiguous data
 
+![](img/io-subarray.svg){width=80%}
+
 - Each process has to access small pieces of data scattered throughout
   a file
 - Very expensive if implemented with separate reads/writes
 - Use file type to implement the non-contiguous access
 
-FIXME: missing figure
 
 
 # File view for non-contiguous data
+
+![](img/io-subarray.svg){width=80%}
 
 ```fortran
 ...
@@ -268,12 +271,6 @@ call mpi_file_set_view(file, disp, mpi_integer, filetype, 'native', &
 call mpi_file_write_all(file, buffer, count, mpi_integer, status, err)
 ```
 
-FIXME: missing figure
-
-- Collective write can be over hundred times faster than the individual
-  for large arrays!
-
-
 # Common mistakes with MPI I/O
 
 - Not defining file offsets as `MPI_Offset` in C and integer
@@ -287,6 +284,9 @@ FIXME: missing figure
 # Performance do's and don'ts
 
 - Use collective I/O routines
+    - Collective write can be over hundred times faster than the individual
+      for large arrays!
+
 - Remember to use the correct striping for each file size
     - Striping can also be set in the `MPI_Info` parameter using the
       `MPI_Info_set` function:
