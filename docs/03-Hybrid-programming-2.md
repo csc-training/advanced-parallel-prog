@@ -29,7 +29,7 @@ MPI_Init_thread(&argc, &argv, required, &provided)
 - In point-to-point communication the thread ID can be used to
   generate a tag that guides the messages to the correct thread
 
-FIXME: missing figure
+![](img/multiple-thread-communication.svg){width=50%}
 
 
 # Thread-specific tags
@@ -102,14 +102,18 @@ tid = omp_get_thread_num() + 1
 
 # MPI+OpenMP thread affinity
 
+<div class="column">
 - MPI library must be aware of the underlying OpenMP for correct
   allocation of resources
     - Oversubscription of CPU cores may cause significant performance
       penalty
 - Additional complexity from batch job schedulers
 - Heavily dependent on the platform used!
+</div>
 
-FIXME: missing figure
+<div class="column">
+![](img/affinity.svg){width=80%}
+</div>
 
 
 # MPI+OpenMP thread affinity (Cray)
