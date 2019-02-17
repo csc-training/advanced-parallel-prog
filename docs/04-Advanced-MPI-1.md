@@ -21,7 +21,7 @@ lang:   en
 
 # Two dimensional domain decomposition
 
-FIXME: missing figure
+![](img/two-d-cartesian-grid.svg){width=50%}
 
 
 # Creating a communicator ordered in Cartesian grid
