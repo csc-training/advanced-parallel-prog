@@ -295,6 +295,14 @@ H5Pclose(plist_id);
 - Default write mode for datasets is individual
 
 
+# Parallel IO with HDF5
+
+- Each process can define different dataspace (i.e. hyperslab) for file
+    - similarly to file view with MPI I/O
+
+# FIXME describe more
+
+
 # High-level API
 
 - For simple, serial pre- and postprocessing tasks one can use the

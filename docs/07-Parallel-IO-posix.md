@@ -107,7 +107,7 @@ FIXME: missing figure
 
 <div class="column">
 - Spokesman strategy
-    - One process takes care of all I/O using normal (POSIX) routines
+    - One process takes care of all I/O using normal (POSIX) routines
     - Requires a lot of communication
     - Writing/reading slow, single writer not able to fully utilize
       filesystem
@@ -151,7 +151,7 @@ end if
 
 <div class="column">
 - Every man for himself
-    - Each process writes its local results to a separate file
+    - Each process writes its local results to a separate file
     - Good bandwidth
     - Difficult to handle a huge number of files in later analysis
     - Can overwhelm filesystem (for example Lustre metadata)

@@ -84,7 +84,7 @@ MPI type
   : C type
 
 MPI_CHAR
-  : signed char
+  : signed char
 
 MPI_SHORT
   : short int
@@ -96,13 +96,13 @@ MPI_LONG
   : long int
 
 MPI_UNSIGNED_SHORT
-  : unsigned short int
+  : unsigned short int
 
 MPI_UNSIGNED_INT
-  : unsigned int
+  : unsigned int
 
 MPI_UNSIGNED_LONG
-  : unsigned long int
+  : unsigned long int
 
 MPI_FLOAT
   : float
@@ -111,7 +111,7 @@ MPI_DOUBLE
   : double
 
 MPI_LONG_DOUBLE
-  : long double
+  : long double
 
 MPI_BYTE
 
@@ -131,16 +131,16 @@ MPI_REAL
   : real
 
 MPI_REAL8
-  : real\*8   (non­standard)
+  : real\*8   (non-standard)
 
 MPI_DOUBLE_PRECISION
-  : double precision
+  : double precision
 
 MPI_COMPLEX
   : complex
 
 MPI_DOUBLE_COMPLEX
-  : double complex
+  : double complex
 
 MPI_LOGICAL
   : logical

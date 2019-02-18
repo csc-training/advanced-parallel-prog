@@ -45,10 +45,21 @@ lang:   en
 
 - All processes in a communicator open a file using
 
-FIXME: missing function definition
+`MPI_File_open(comm, filename, mode, info, fhandle)`
+  : `comm` {.input}
+    : communicator that performs parallel I/O
+  : `mode` {.input}
+    : `MPI_MODE_RDONLY`, `MPI_MODE_WRONLY`, `I_MODE_CREATE`,
+      `MPI_MODE_RDWR`, …
+  : `info` {.input}
+    : Hints to implementation for optimal performance
+      (No hints: `MPI_INFO_NULL`)
+  : `fhandle` {.output}
+    : parallel file handle
 
+- Mode parameters can be combined with + in Fortran and | in C/C++
 - File is closed using `MPI_File_close(fhandle)`
-- Can be combined with + in Fortran and | in C/C++
+
 
 
 # File writing
@@ -57,28 +68,40 @@ FIXME: missing function definition
     - Thread-safe
     - The file pointer is neither used or incremented
 
-FIXME: missing function definition
+`MPI_File_write_at(fhandle, disp, buffer, count, datatype, status)`
+  : `disp` {.input}
+    : displacement in bytes (with the default file view) from the
+      beginning of file
+  : `buffer` {.input}
+    : buffer in memory from where to write the data
+  : `count` {.input}
+    : number of elements in the buffer
+  : `datatype` {.input}
+    : datatype of elements to write
+  : `status` {.output}
+    : similar to status in MPI_Recv, stores number of elements actually written
+    
 
 
 # Example: parallel write
 
 ```fortran
-program output
-use mpi
-implicit none
+program output
+use mpi
+implicit none
 
-integer :: err, i, myid, file, intsize
-integer :: status(mpi_status_size)
-integer, parameter :: count=100
-integer, dimension(count) :: buf
-integer(kind=mpi_offset_kind) :: disp
+integer :: err, i, myid, file, intsize
+integer :: status(mpi_status_size)
+integer, parameter :: count=100
+integer, dimension(count) :: buf
+integer(kind=mpi_offset_kind) :: disp
 
-call mpi_init(err)
-call mpi_comm_rank(mpi_comm_world, myid,&  err)
+call mpi_init(err)
+call mpi_comm_rank(mpi_comm_world, myid,&  err)
 
-do i = 1, count
-    buf(i) = myid * count + i
-end do
+do i = 1, count
+    buf(i) = myid * count + i
+end do
 ```
 
 - First process writes integers 1-100 to the beginning of the file, etc.
@@ -89,19 +112,19 @@ end do
 ```fortran
 ...
 
-call mpi_file_open(mpi_comm_world, 'test', &
-    mpi_mode_create + mpi_mode_wronly, & mpi_info_null, file, err)
+call mpi_file_open(mpi_comm_world, 'test', &
+    mpi_mode_create + mpi_mode_wronly, & mpi_info_null, file, err)
 
 intsize = sizeof(count)
-disp = myid * count * intsize
+disp = myid * count * intsize
 
-call mpi_file_write_at(file, disp, buf, &
-    count, mpi_integer, status, err)
+call mpi_file_write_at(file, disp, buf, &
+    count, mpi_integer, status, err)
 
-call mpi_file_close(file, err)
-call mpi_finalize(err)
+call mpi_file_close(file, err)
+call mpi_finalize(err)
 
-end program output
+end program output
 ```
 
 - File offset determined explicitly
@@ -113,14 +136,37 @@ end program output
     - Thread-safe
     - The file pointer is neither referred or incremented
 
-FIXME: missing function definition
+`MPI_File_read_at(fhandle, disp, buffer, count, datatype, status)`
+  : `disp` {.input}
+    : displacement in bytes (with the default file view) from the
+      beginning of file
+  : `buffer` {.output}
+    : buffer in memory where to read the data
+  : `count` {.input}
+    : number of elements in the buffer
+  : `datatype` {.input}
+    : datatype of elements to read
+  : `status` {.output}
+    : similar to status in MPI_Recv, stores number of elements actually read
+
 
 
 # File pointer
 
 - The file pointer can be updated with
+
+`MPI_File_seek(fhandle, disp, whence)`
+  : `disp` {.input}
+    : displacement in bytes (with the default file view)
+  : `whence` {.input}
+    : `MPI_SEEK_SET`: the pointer is set to `disp`
+    : `MPI_SEEK_CUR`: the pointer is set to the current pointer position
+       plus `disp`
+    : `MPI_SEEK_END`: the pointer is set to the end of file plus `disp`
+       (can be negative)
+
 - There are routines `MPI_File_write` and `MPI_File_read` that use the
-  updated file handle (and not explicit offset)
+  updated file handle (and not explicit displacement)
 
 
 # File writing
@@ -149,14 +195,11 @@ FIXME: missing function definition
 `MPI_File_read(fhandle, buffer, count, datatype, status)`
   : `buffer`
     : buffer in memory where to read the data
-
-    `count`
+  : `count`
     : number of elements to read
-
-    `datatype`
+  : `datatype`
     : datatype of elements to read
-
-    `status`
+  : `status`
     : similar to status in `MPI_Recv`, amount of data read can be
       determined by MPI_Get_count
 
@@ -214,30 +257,25 @@ FIXME: missing function definition
 
 # File view
 
-`MPI_File_set_view(fhandle, disp, etype, filetype, datarep, info)`
+`MPI_File_set_view(fhandle, disp, etype, filetype, datarep, info)`
   : `disp`
     : Offset from beginning of file. Always in bytes
-
-    `etype`
-    : Basic MPI type or user defined type
-    : Basic unit of data access
-
-    `filetype`
+  : `etype`
+    : Basic MPI type or user defined type. Specifies the unit of data access
+  : `filetype`
     : Same type as etype or user defined type constructed of etype
-
-    `datarep`
-    : Data representation (can be adjusted for portability) "native": store
-      in same format as in memory
-
-    `info`
+  : `datarep`
+    : Data representation (can be adjusted for portability)
+    : "native": store in same format as in memory
+  : `info`
     : Hints for implementation that can improve performance
       `MPI_INFO_NULL`: No hints
 
 # File view
 
 - The values for `datarep` and the extents of `etype` must be identical on
-  all processes in the group; values for `disp`, `filetype`, and `info` may
-  vary.
+  all processes in the communicator.
+    - values for `disp`, `filetype`, and `info` may vary.
 - The datatypes passed in must be committed.
 
 
@@ -265,10 +303,10 @@ call mpi_type_create_subarray(2, sizes, subsizes, starts, mpi_integer, &
 call mpi_type_commit(filetype)
 
 disp = 0
-call mpi_file_set_view(file, disp, mpi_integer, filetype, 'native', &
+call mpi_file_set_view(file, disp, mpi_integer, filetype, 'native', &
      mpi_info_null, err)
 
-call mpi_file_write_all(file, buffer, count, mpi_integer, status, err)
+call mpi_file_write_all(file, buffer, count, mpi_integer, status, err)
 ```
 
 # Common mistakes with MPI I/O

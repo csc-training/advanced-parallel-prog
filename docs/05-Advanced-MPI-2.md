@@ -8,53 +8,53 @@ lang:   en
 
 # MPI datatypes
 
-  - MPI datatypes are used for communication purposes
-      - Datatype tells MPI where to take the data when sending or where to
-        put data when receiving
-  - Elementary datatypes (MPI_INT, MPI_REAL, ...)
-      - Different types in Fortran and C, correspond to languages basic
-        types
-      - Enable communication using contiguous memory sequence of identical
-        elements (e.g. vector or matrix)
+- MPI datatypes are used for communication purposes
+    - Datatype tells MPI where to take the data when sending or where to
+      put data when receiving
+- Elementary datatypes (`MPI_INT`, `MPI_REAL`, ...)
+    - Different types in Fortran and C, correspond to languages basic
+      types
+    - Enable communication using contiguous memory sequence of identical
+      elements (e.g. vector or matrix)
 
 
 # User-defined datatypes
 
-  - Use elementary datatypes as building blocks
-  - Enable communication of
-      - Non-contiguous data with a single MPI call, e.g. rows or columns of
-        a matrix
-      - Heterogeneous data (structs in C, types in Fortran)
-      - Larger messages, count is `int` in C
-  - Provide higher level of programming
-      - Code is more compact and maintainable
-  - Needed for getting the most out of MPI I/O
+- Use elementary datatypes as building blocks
+- Enable communication of
+    - Non-contiguous data with a single MPI call, e.g. rows or columns of
+      a matrix
+    - Heterogeneous data (structs in C, types in Fortran)
+    - Larger messages, count is `int` in C
+- Provide higher level of programming
+    - Code is more compact and maintainable
+- Needed for getting the most out of MPI I/O
 
 
 # User-defined datatypes
 
-  - User-defined datatypes can be used both in point-to-point
-    communication and collective communication
-  - The datatype instructs where to take the data when sending or where
-    to put data when receiving
-  - Non-contiguous data in sending process can be received as contiguous
-    or vice versa
+- User-defined datatypes can be used both in point-to-point
+  communication and collective communication
+- The datatype instructs where to take the data when sending or where
+  to put data when receiving
+- Non-contiguous data in sending process can be received as contiguous
+  or vice versa
 
 
 # Using user-defined datatypes
 
-  - A new datatype is created from existing ones with a datatype constructor
-      - Several routines for different special cases
-  - A new datatype must be committed before using it
+- A new datatype is created from existing ones with a datatype constructor
+    - Several routines for different special cases
+- A new datatype must be committed before using it
 
 `MPI_Type_commit(newtype)`
- : newtype {.input}
+ : `newtype` {.input}
    : the new datatype to commit
 
-  - A type should be freed after it is no longer needed
+- A type should be freed after it is no longer needed
 
 `MPI_Type_free(newtype)`
- : newtype {.input}
+ : `newtype` {.input}
    : newtype the datatype for decommision
 
 
@@ -82,7 +82,8 @@ call mpi_type_free(rowtype, ierr)
 # Datatype constructor examples
 
 <div class="column">
- `MPI_Type_contiguous`
+
+`MPI_Type_contiguous`
   : contiguous datatypes
 
 `MPI_Type_vector`
@@ -106,42 +107,45 @@ call mpi_type_free(rowtype, ierr)
 
 `MPI_Type_create_struct`
   : fully general datatype
+
 </div>
 
 # Understanding datatypes: typemap
 
-  - A datatype is defined by a typemap
-      - pairs of basic types and displacements (in bytes)
-      - E.g. `MPI_INT={(int,0)}`
+- A datatype is defined by a typemap
+    - pairs of basic types and displacements (in bytes)
+    - E.g. `MPI_INT={(int,0)}`
 
 ![](img/typemap.svg){width=80%}
 
 
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT
 
-  - The most general type constructor, creates a new type from heterogeneous
-    blocks
-      - E.g. Fortran types and C structures
-      - Input is the typemap
+- The most_general_type_constructor, creates a new type from heterogeneous
+  blocks
+    - E.g. Fortran types and C structures
+    - Input is the typemap
 
 ```fortran
-count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
+count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 ```
 ![](img/type-struct.svg){width=70%}
 
-# Datatype constructors: MPI_TYPE_CREATE_STRUCT
+# Datatype constructors: MPI_TYPE_CREATE_STRUCT {.split-definition}
 
-`MPI_Type_create_struct(count, blocklens, displs, types, newtype)`
+`MPI_Type_create_struct(count, blocklens, displs, types, newtype)`
   : `count` {.input}
     : number of blocks
-  :  `blocklens`
+  :  `blocklens` {.input}
     : lengths of blocks (array)
-  : `displs`
+  : `displs` {.input}
     : displacements of blocks in bytes (array)
-  : `types`
+  : `types` {.input}
     : types of blocks (array)
-  : `newtype`
+  : `newtype` {.input}
     : new datatype
+
+![](img/type-struct.svg){width=70%}
 
 # Example: sending a C struct
 
@@ -149,9 +153,9 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 /* Structure for particles */
 
 struct ParticleStruct {
-    int charge;         /* particle charge */
-    double coord[3];    /* particle coords */
-    double velocity[3]; /* particle velocity vector components */
+    int charge;         /* particle charge */
+    double coord[3];    /* particle coords */
+    double velocity[3]; /* particle velocity vector components */
 };
 
 struct ParticleStruct particle[1000];
@@ -173,14 +177,16 @@ MPI_Type_free(&Particletype);
 
 # Determining displacements
 
-  - The previous example defines and assumes a certain alignment for the
-    data within the structure
-  - The displacements can (and should!) be determined by using the function
+- The previous example defines and assumes a certain alignment for the
+  data within the structure
+- The displacements can (and should!) be determined by using the function
 
 `MPI_Get_address(pointer, address)`
-
-  - The address of the variable is returned, which can then be used for
-    determining relative displacements
+  : `pointer` {.input}
+    variable (pointer to it) which address to determine
+  : `address` {.output}
+    address of the variable, type is `MPI_Aint` (C) or 
+    `integer(mpi_address_kind` (Fortran)
 
 
 # Determining displacements
@@ -188,9 +194,9 @@ MPI_Type_free(&Particletype);
 ```c
 /* Structure for particles */
 struct ParticleStruct {
-    int charge;         /* particle charge */
-    double coords[3];   /* particle coords */
-    double velocity[3]; /* particle velocity vector components */
+    int charge;         /* particle charge*/
+    double coords[3];   /* particle coords */
+    double velocity[3]; /* particle velocity vector components */
 };
 
 struct ParticleStruct particle[1000];
@@ -208,22 +214,16 @@ disp[0] = 0;
 
 ...
 ```
-# Determining displacements
-
-  - Note! The address used for `MPI_Get_address` has special type:
-      - `MPI_Aint` in C
-      - `integer(mpi_address_kind`) in Fortran
-
 
 # Gaps between datatypes
 
-  - Sending of an array of the `ParticleStruct` structures may have a
-    portability issue: it assumes that array elements are packed in memory
-      - Implicit assumption: the extent of the datatype was the same as the
-        size of the C struct
-      - This is not necessarily the case
-  - If there are gaps in memory between the successive structures, sending
-    does not work correctly
+- Sending of an array of the `ParticleStruct` structures may have a
+  portability issue: it assumes that array elements are packed in memory
+    - Implicit assumption: the extent of the datatype was the same as the
+      size of the C struct
+    - This is not necessarily the case
+- If there are gaps in memory between the successive structures, sending
+  does not work correctly
 
 
 # Type extent {.section}
@@ -231,12 +231,12 @@ disp[0] = 0;
 
 # Sending multiple elements: Extent
 
-  - Sending multiple user-defined types at once may not behave as expected
-  - The *lower bound* describes where the datatype starts
-      - LB: min(dispj)
-  - The *extent* describes the stride at which contiguous elements are read
-    or written when sending multiple elements
-      - extent = max(dispj + sizej) – LB + padding
+- Sending multiple user-defined types at once may not behave as expected
+- The *lower bound* describes where the datatype starts
+    - LB: min(dispj)
+- The *extent* describes the stride at which contiguous elements are read
+  or written when sending multiple elements
+    - extent = max(dispj + sizej) – LB + padding
 
 
 # Multiple MPI_TYPE_VECTORs
@@ -300,20 +300,20 @@ psize = sizeof(particle[0]);
 MPI_Send(particle, 1000*psize, MPI_BYTE, ...);
 ```
 
-  - Non-contiguous data by manual packing
-      - Copy data into or out from temporary buffer
-  - Use MPI_Pack and MPI_Unpack functions
-      - Performance will likely be an issue
-  - Structures and types as continuous stream of bytes: Communicate
-    everything using MPI_BYTE
-      - Portability can be an issue - be careful
+- Non-contiguous data by manual packing
+    - Copy data into or out from temporary buffer
+- Use MPI_Pack and MPI_Unpack functions
+    - Performance will likely be an issue
+- Structures and types as continuous stream of bytes: Communicate
+  everything using MPI_BYTE
+    - Portability can be an issue - be careful
 
 # Summary
 
-  - User-defined types enable communication of non-contiguous or
-    heterogeneous data with single MPI communication operations
-      - Improves code readability & portability
-      - Allows optimizations by the MPI runtime
-  - This time we focused on the most general type specification:
-    `MPI_Type_create_struct`
-  - Introduced the concepts of extent and typemap
+- User-defined types enable communication of non-contiguous or
+  heterogeneous data with single MPI communication operations
+    - Improves code readability & portability
+    - Allows optimizations by the MPI runtime
+- This time we focused on the most general type specification:
+  `MPI_Type_create_struct`
+- Introduced the concepts of extent and typemap
