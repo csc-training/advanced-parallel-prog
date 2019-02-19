@@ -24,7 +24,7 @@ lang:   en
 ![](img/two-d-cartesian-grid.svg){width=50%}
 
 
-# Creating a communicator ordered in Cartesian grid
+# Communicator in Cartesian grid: MPI_Cart_create {.split-definition}
 
 `MPI_Cart_create(oldcomm, ndims, dims, periods, reorder, newcomm)`
   : `oldcomm` {.input}
@@ -132,9 +132,6 @@ call mpi_sendrecv(buf(1,1), 1, rowtype, nbr_up, &
 ! bottom boundaries: send to below, receive from above
 ...
 ```
-
-FIXME: missing figure
-
 
 # Summary
 
