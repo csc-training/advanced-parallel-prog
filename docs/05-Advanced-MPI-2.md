@@ -183,10 +183,12 @@ MPI_Type_free(&Particletype);
 
 `MPI_Get_address(pointer, address)`
   : `pointer` {.input}
-    variable (pointer to it) which address to determine
+    : variable (pointer to it) which address to determine
   : `address` {.output}
-    address of the variable, type is `MPI_Aint` (C) or 
-    `integer(mpi_address_kind` (Fortran)
+    : address of the variable, type is
+
+        - `MPI_Aint` (C)  
+        - `integer(mpi_address_kind` (Fortran)
 
 
 # Determining displacements
@@ -243,23 +245,28 @@ disp[0] = 0;
 
 ![](img/vector-extent.svg){width=80%}
 
-# Setting extent and lower bound
+
+# Getting extent and lower bound
 
 `MPI_Type_get_extent(type, lb, extent)`
-  : type
+  : `type` {.input}
     : Datatype
-  : lb
+  : `lb` {.output}
     : Lower bound of type (in bytes)
-  : extent
+  : `extent` {.output}
     : Extent of type (in bytes)
+
+
+# Setting extent and lower bound
+    
 `MPI_Type_create_resized(type, lb, extent, newtype)`
-  : type
+  : `type` {.input}
     : Old datatype
-  : lb
+  : `lb` {.input}
     : New lower bound (in bytes)
-  : extent
+  : `extent` {.input}
     : New extent (in bytes)
-  : newtype
+  : `newtype` {.output}
     : New datatype, commit before use
 
 # Multiple MPI_TYPE_VECTORs
