@@ -192,8 +192,9 @@ Hello world! by thread 1
     - Fortran: `$OMP DO`
     - C/C++: `#pragma omp for`
     - Directive must be inside a parallel region
-    - Can also be combined with parallel: `$OMP PARALLEL DO` / `#pragma
-      omp parallel for`
+    - Can also be combined with parallel:
+        - `$OMP PARALLEL DO`
+        - `#pragma omp parallel for`
 - Loop index is private by default
 - Work sharing can be controlled using *schedule* clause
     - `static`, `dynamic`, `guided`, or `runtime`
@@ -203,12 +204,13 @@ Hello world! by thread 1
 `reduction(operator:var_list)`
   : Performs reduction on the (scalar) variables in list (sum, max, min,
     ...)
-  : Private reduction variable is created for each thread's partial
-    result
-  : Private reduction variable is initialized to operator's initial
-    value, e.g., 0 for sum
-  : After parallel region the reduction operation is applied to private
-    variables and **result is aggregated to the shared variable**
+
+      - Private reduction variable is created for each thread's partial
+        result
+      - Private reduction variable is initialized to operator's initial
+        value, e.g., 0 for sum
+      - After parallel region the reduction operation is applied to private
+        variables and **result is aggregated to the shared variable**
 
 # Execution controls
 
@@ -217,9 +219,9 @@ Hello world! by thread 1
     - I/O, initializations, updating global values, etc.
     - Remember the synchronization!
 - OpenMP provides clauses for controlling the execution of code blocks
-    - barrier
-    - master & single
-    - critical
+    - `barrier`
+    - `master` & `single`
+    - `critical`
 
 
 # OpenMP summary
