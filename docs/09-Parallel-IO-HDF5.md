@@ -261,6 +261,29 @@ int main(int argc, char *argv[]) {
     - count number of blocks to select
     - block size of the block
 
+# Data selection with hyperslab
+
+![](img/hdf5-hyperslab.svg){width=30%}
+
+```c
+...
+    hsize_t     offset[2] = {0, 1};             
+    hsize_t     stride[2] = {4, 1;
+    hsize_t     count[2]  = {2, 1};              
+    hsize_t     block[2]  = {2, 1};
+
+...
+    dataspace_id = H5Dget_space (dataset_id);
+    status = H5Sselect_hyperslab (dataspace_id, H5S_SELECT_SET, offset,
+                                  stride, count, block);
+
+    /* Data will be written only to the selection described by the hyperslab */
+    status = H5Dwrite (dataset_id, H5T_NATIVE_INT, memspace_id,
+                       dataspace_id, H5P_DEFAULT, sdata);
+```
+
+
+
 
 # Parallel I/O with HDF5
 
@@ -269,6 +292,8 @@ int main(int argc, char *argv[]) {
   dataset writing
     - HDF5 uses MPI-IO file routines for file operations
     - HDF5 library has to be compiled with parallel I/O support
+- Each process can define different dataspace (i.e. hyperslab) for file
+    - similarly to file view with MPI I/O
 
 
 # Parallel IO with HDF5
@@ -294,13 +319,6 @@ H5Pclose(plist_id);
 
 - Default write mode for datasets is individual
 
-
-# Parallel IO with HDF5
-
-- Each process can define different dataspace (i.e. hyperslab) for file
-    - similarly to file view with MPI I/O
-
-# FIXME describe more
 
 
 # High-level API
