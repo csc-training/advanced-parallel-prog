@@ -51,22 +51,20 @@ lang:   en
   : `mode` {.input}
     : `MPI_MODE_RDONLY`, `MPI_MODE_WRONLY`, `I_MODE_CREATE`,
       `MPI_MODE_RDWR`, …
-  : `info` {.input}
+
+        - Mode parameters can be combined with + in Fortran and | in C/C++
+
+: `info` {.input}
     : Hints to implementation for optimal performance
       (No hints: `MPI_INFO_NULL`)
   : `fhandle` {.output}
     : parallel file handle
 
-- Mode parameters can be combined with + in Fortran and | in C/C++
 - File is closed using `MPI_File_close(fhandle)`
 
 
 
-# File writing
-
-- Write file at explicitly defined offsets
-    - Thread-safe
-    - The file pointer is neither used or incremented
+# File writing at explicit location
 
 `MPI_File_write_at(fhandle, disp, buffer, count, datatype, status)`
   : `disp` {.input}
@@ -127,14 +125,8 @@ call mpi_finalize(err)
 end program output
 ```
 
-- File offset determined explicitly
 
-
-# File reading
-
-- Read file at explicitly defined offsets
-    - Thread-safe
-    - The file pointer is neither referred or incremented
+# File reading at explicit location
 
 `MPI_File_read_at(fhandle, disp, buffer, count, datatype, status)`
   : `disp` {.input}
@@ -151,9 +143,12 @@ end program output
 
 
 
-# File pointer
+# Setting file pointer
 
-- The file pointer can be updated with
+- In previous examples the location for writing or reading was provided
+  explicitly in the `write` / `read` calls.
+- It is also possible to set the location of file pointer separately
+  with
 
 `MPI_File_seek(fhandle, disp, whence)`
   : `disp` {.input}
@@ -165,13 +160,7 @@ end program output
     : `MPI_SEEK_END`: the pointer is set to the end of file plus `disp`
        (can be negative)
 
-- There are routines `MPI_File_write` and `MPI_File_read` that use the
-  updated file handle (and not explicit displacement)
-
-
-# File writing
-
-- Write file at individual file pointer:
+# File writing at file pointer
 
 `MPI_File_write(fhandle, buffer, count, datatype, status)`
   : `buffer`
@@ -188,9 +177,7 @@ end program output
     - Not thread safe
 
 
-# File reading
-
-- Read file at individual file pointer
+# File reading at file pointer
 
 `MPI_File_read(fhandle, buffer, count, datatype, status)`
   : `buffer`
