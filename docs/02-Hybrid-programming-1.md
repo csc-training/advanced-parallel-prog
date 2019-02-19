@@ -8,7 +8,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=100%}
+![](img/processes-threads.svg){width=90%}
 
 <div class="column">
 ## Process
@@ -28,7 +28,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=80%}
+![](img/processes-threads.svg){width=90%}
 
 <div class="column">
 ## Process
