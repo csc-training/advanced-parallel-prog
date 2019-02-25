@@ -47,15 +47,15 @@ lang:   en
     - Several routines for different special cases
 - A new datatype must be committed before using it
 
-`MPI_Type_commit(newtype)`
- : `newtype` {.input}
-   : the new datatype to commit
+    `MPI_Type_commit(newtype)`
+      : `newtype` {.input}
+        : the new datatype to commit
 
 - A type should be freed after it is no longer needed
 
-`MPI_Type_free(newtype)`
- : `newtype` {.input}
-   : newtype the datatype for decommision
+    `MPI_Type_free(newtype)`
+      : `newtype` {.input}
+        : the datatype for decommision
 
 
 # Example: sending rows of a matrix in Fortran
@@ -136,14 +136,21 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 `MPI_Type_create_struct(count, blocklens, displs, types, newtype)`
   : `count` {.input}
     : number of blocks
-  :  `blocklens` {.input}
+
+    `blocklens` {.input}
     : lengths of blocks (array)
-  : `displs` {.input}
+
+    `displs` {.input}
     : displacements of blocks in bytes (array)
-  : `types` {.input}
+
+    `types` {.input}
     : types of blocks (array)
-  : `newtype` {.input}
+
+    `newtype` {.input}
     : new datatype
+
+    `-` {.ghost}
+    : `-` {.ghost}
 
 ![](img/type-struct.svg){width=70%}
 
@@ -184,11 +191,12 @@ MPI_Type_free(&Particletype);
 `MPI_Get_address(pointer, address)`
   : `pointer` {.input}
     : variable (pointer to it) which address to determine
-  : `address` {.output}
+
+    `address` {.output}
     : address of the variable, type is
 
-        - `MPI_Aint` (C)  
-        - `integer(mpi_address_kind` (Fortran)
+        - `MPI_Aint` (C)
+        - `integer(mpi_address_kind)` (Fortran)
 
 
 # Determining displacements
@@ -251,22 +259,27 @@ disp[0] = 0;
 `MPI_Type_get_extent(type, lb, extent)`
   : `type` {.input}
     : Datatype
-  : `lb` {.output}
+
+    `lb` {.output}
     : Lower bound of type (in bytes)
-  : `extent` {.output}
+
+    `extent` {.output}
     : Extent of type (in bytes)
 
 
 # Setting extent and lower bound
-    
+
 `MPI_Type_create_resized(type, lb, extent, newtype)`
   : `type` {.input}
     : Old datatype
-  : `lb` {.input}
+
+    `lb` {.input}
     : New lower bound (in bytes)
-  : `extent` {.input}
+
+    `extent` {.input}
     : New extent (in bytes)
-  : `newtype` {.output}
+
+    `newtype` {.output}
     : New datatype, commit before use
 
 # Multiple MPI_TYPE_VECTORs
