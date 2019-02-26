@@ -13,7 +13,7 @@ lang:   en
 - How to get the data efficiently from thousands of nodes of a
   supercomputer to physical disks?
 
-![](img/io-illustration.svg){width=70%}
+![](img/io-illustration.png)
 
 
 # Parallel I/O
@@ -37,7 +37,7 @@ lang:   en
 
 # I/O layers
 
-![](img/io-layers.svg){width=100%}
+![](img/io-layers.png)
 
 
 # I/O library choice
@@ -76,12 +76,12 @@ lang:   en
 
 # Lustre architecture
 
-![](img/lustre-architecture.svg){width=80%}
+![](img/lustre-architecture.png)
 
 
 # Lustre file striping
 
-![](img/lustre-striping.svg){width=80%}
+![](img/lustre-striping.png)
 
 # Lustre file striping
 
@@ -116,7 +116,7 @@ FIXME: missing figure
       files)
 </div>
 <div class="column">
-![](img/posix-spokesman.svg){width=50%}
+![](img/posix-spokesman.png)
 </div>
 
 # Example: spokesperson strategy
@@ -158,7 +158,7 @@ end if
 </div>
 
 <div class="column">
-![](img/posix-everybody.svg){width=50%}
+![](img/posix-everybody.png)
 </div>
 
 # Summary

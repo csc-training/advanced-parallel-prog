@@ -240,7 +240,7 @@ end program output
 - Wait for completion using `MPI_Test`, `MPI_Wait`, etc.
 - Can be used to overlap I/O with computation:
 
-![](img/nonblocking-io.svg){width=70%}
+![](img/nonblocking-io.png)
 
 
 # Non-contiguous data access with MPI-IO {.section}
@@ -288,7 +288,7 @@ end program output
 
 # File view for non-contiguous data
 
-![](img/io-subarray.svg){width=80%}
+![](img/io-subarray.png)
 
 - Each process has to access small pieces of data scattered throughout
   a file
@@ -299,7 +299,7 @@ end program output
 
 # File view for non-contiguous data
 
-![](img/io-subarray.svg){width=80%}
+![](img/io-subarray.png)
 
 ```fortran
 integer, dimension(2,2) :: array

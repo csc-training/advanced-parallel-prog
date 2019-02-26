@@ -45,7 +45,7 @@ lang:   en
 - Windows are created by collective calls
 - Windows may be different in different processes
 
-![](img/one-sided-window.svg){width=40%}
+![](img/one-sided-window.png)
 
 
 # Data movement operations
@@ -84,7 +84,7 @@ lang:   en
 </div>
 
 <div class="column">
-![](img/one-sided-epoch.svg){width=70%}
+![](img/one-sided-epoch.png)
 </div>
 
 # Key MPI functions for ONE-sided communication {.section}
@@ -245,7 +245,7 @@ MPI_Win_free(&window);
 - Compatibility of local and remote operations when multiple processes
   access a window during an epoch
 
-![](img/one-sided-limitations.svg){width=70%}
+![](img/one-sided-limitations.png)
 
 
 # Advanced synchronization:

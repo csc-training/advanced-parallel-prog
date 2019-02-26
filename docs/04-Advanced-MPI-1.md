@@ -21,7 +21,7 @@ lang:   en
 
 # Two dimensional domain decomposition
 
-![](img/two-d-cartesian-grid.svg){width=50%}
+![](img/two-d-cartesian-grid.png)
 
 
 # Communicator in Cartesian grid: MPI_Cart_create {.split-definition}

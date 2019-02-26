@@ -60,7 +60,7 @@ lang:   en
 
 # Example: sending rows of a matrix in Fortran
 
-![](img/fortran-array-layout.svg){width=40%}
+![](img/fortran-array-layout.png)
 
 
 ```fortran
@@ -116,7 +116,7 @@ call mpi_type_free(rowtype, ierr)
     - pairs of basic types and displacements (in bytes)
     - E.g. `MPI_INT={(int,0)}`
 
-![](img/typemap.svg){width=80%}
+![](img/typemap.png)
 
 
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT
@@ -129,7 +129,7 @@ call mpi_type_free(rowtype, ierr)
 ```fortran
 count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 ```
-![](img/type-struct.svg){width=70%}
+![](img/type-struct.png)
 
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT {.split-definition}
 
@@ -152,7 +152,7 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
     `-` {.ghost}
     : `-` {.ghost}
 
-![](img/type-struct.svg){width=70%}
+![](img/type-struct.png)
 
 # Example: sending a C struct
 
@@ -251,7 +251,7 @@ disp[0] = 0;
 
 # Multiple MPI_TYPE_VECTORs
 
-![](img/vector-extent.svg){width=80%}
+![](img/vector-extent.png)
 
 
 # Getting extent and lower bound
@@ -284,7 +284,7 @@ disp[0] = 0;
 
 # Multiple MPI_TYPE_VECTORs
 
-![](img/vector-resize.svg){width=80%}
+![](img/vector-resize.png)
 
 
 # Example: sending an array of structs portably

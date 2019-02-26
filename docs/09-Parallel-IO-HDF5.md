@@ -263,13 +263,13 @@ int main(int argc, char *argv[]) {
 
 # Data selection with hyperslab
 
-![](img/hdf5-hyperslab.svg){width=30%}
+![](img/hdf5-hyperslab.png)
 
 ```c
 ...
-    hsize_t     offset[2] = {0, 1};             
+    hsize_t     offset[2] = {0, 1};
     hsize_t     stride[2] = {4, 1;
-    hsize_t     count[2]  = {2, 1};              
+    hsize_t     count[2]  = {2, 1};
     hsize_t     block[2]  = {2, 1};
 
 ...

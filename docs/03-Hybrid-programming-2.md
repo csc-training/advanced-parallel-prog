@@ -29,7 +29,7 @@ MPI_Init_thread(&argc, &argv, required, &provided)
 - In point-to-point communication the thread ID can be used to
   generate a tag that guides the messages to the correct thread
 
-![](img/multiple-thread-communication.svg){width=50%}
+![](img/multiple-thread-communication.png)
 
 
 # Thread-specific tags
@@ -112,7 +112,7 @@ tid = omp_get_thread_num() + 1
 </div>
 
 <div class="column">
-![](img/affinity.svg){width=80%}
+![](img/affinity.png)
 </div>
 
 
