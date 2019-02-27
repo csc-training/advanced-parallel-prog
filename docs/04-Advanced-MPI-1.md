@@ -123,16 +123,16 @@ call mpi_cart_shift(comm2d, 1, 1, nbr_left, nbr_right, rc)
 ...
 
 ! left boundaries: send to left, receive from right
-call mpi_sendrecv(buf(1,1), 1, coltype, nbr_left, &
-    tag_left, buf(1,n+1), 1, coltype, nbr_right, &
-    tag_left, comm2d, mpi_status_ignore, rc)
+call mpi_sendrecv(buf(1,1), 1, coltype, nbr_left, tag_left, &
+                  buf(1,n+1), 1, coltype, nbr_right, tag_left, &
+                  comm2d, mpi_status_ignore, rc)
 
 ! right boundaries: send to right, receive from left
 ...
 ! top boundaries: send to above, receive from below
-call mpi_sendrecv(buf(1,1), 1, rowtype, nbr_up, &
-    tag_up, buf(n+1,1), 1, rowtype, nbr_down, &
-    tag_up, comm2d, mpi_status_ignore, rc)
+call mpi_sendrecv(buf(1,1), 1, rowtype, nbr_up, tag_up, &
+                  buf(n+1,1), 1, rowtype, nbr_down, tag_up, &
+                  comm2d, mpi_status_ignore, rc)
 
 ! bottom boundaries: send to below, receive from above
 ...
