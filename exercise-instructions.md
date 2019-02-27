@@ -12,7 +12,7 @@ We will use CSC's Cray XC40 supercomputer Sisu for the exercises. Log onto
 Sisu using the provided username and password, for example
 
 ```
-ssh -X user@sisu.csc.fi
+ssh -X training000@sisu.csc.fi
 ```
 
 For editing program source files you can use e.g. Emacs editor with or without
