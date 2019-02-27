@@ -21,7 +21,7 @@ lang:   en
 
 # Two dimensional domain decomposition
 
-![](img/two-d-cartesian-grid.svg){width=50%}
+![](img/two-d-cartesian-grid.png)
 
 
 # Communicator in Cartesian grid: MPI_Cart_create {.split-definition}
@@ -29,16 +29,21 @@ lang:   en
 `MPI_Cart_create(oldcomm, ndims, dims, periods, reorder, newcomm)`
   : `oldcomm` {.input}
     : communicator
-  : `ndims` {.input}
+
+    `ndims` {.input}
     : number of dimensions
-  : `dims` {.input}
+
+    `dims` {.input}
     : integer array (size ndims) that defines the number of processes in each
       dimension
-  : `periods` {.input}
+
+    `periods` {.input}
     : array that defines the periodicity of each dimension
-  : `reorder` {.input}
+
+    `reorder` {.input}
     : is MPI allowed to renumber the ranks
-  : `newcomm` {.output}
+
+    `newcomm` {.output}
     : new Cartesian communicator
 
 

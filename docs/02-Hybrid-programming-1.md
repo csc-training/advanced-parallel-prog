@@ -8,7 +8,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=90%}
+![](img/processes-threads.png)
 
 <div class="column">
 ## Process
@@ -28,7 +28,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=90%}
+![](img/processes-threads.png)
 
 <div class="column">
 ## Process
@@ -78,7 +78,7 @@ lang:   en
 </div>
 
 <div class="column">
-![](img/supercomputer-node-hybrid.svg){width=100%}
+![](img/supercomputer-node-hybrid.png)
 </div>
 
 # Example: Hybrid hello
@@ -127,7 +127,7 @@ I'm thread 2 in process 0
 
 # Thread support in MPI
 
-![](img/mpi-thread-support.svg){width=100%}
+![](img/mpi-thread-support.png)
 
 # Thread safe initialization
 

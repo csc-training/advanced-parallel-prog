@@ -7,7 +7,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=90%}
+![](img/processes-threads.png)
 
 <div class="column">
 
@@ -31,7 +31,7 @@ lang:   en
 
 # Processes and threads
 
-![](img/processes-threads.svg){width=90%}
+![](img/processes-threads.png)
 
 <div class="column">
 ## Process
@@ -98,7 +98,7 @@ lang:   en
 
 <div class="column">
 
-![](img/omp-parallel.svg){width=50%}
+![](img/omp-parallel.png)
 
 </div>
 
@@ -226,7 +226,7 @@ Hello world! by thread 1
 
 # OpenMP summary
 
-![](img/omp-summary.svg){width=80%}
+![](img/omp-summary.png)
 
 
 # Getting started with MPI {.section}
@@ -271,7 +271,7 @@ Hello world! by thread 1
 
 <div class="column">
 
-![](img/communication-schematic.svg){width=50%}
+![](img/communication-schematic.png)
 
 </div>
 
@@ -302,7 +302,7 @@ Hello world! by thread 1
 
 # Collective operations examples
 
-![](img/collective-patterns.svg){width=90%}
+![](img/collective-patterns.png)
 
 # MPI datatypes
 
@@ -315,8 +315,8 @@ Hello world! by thread 1
 
 # Communicators
 
-![](img/communicators.svg){width=80%}
+![](img/communicators.png)
 
 # Basic MPI summary
 
-![](img/mpi-summary.svg){width=80%}
+![](img/mpi-summary.png)

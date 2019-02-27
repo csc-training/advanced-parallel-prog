@@ -45,7 +45,7 @@ lang:   en
 - Windows are created by collective calls
 - Windows may be different in different processes
 
-![](img/one-sided-window.svg){width=40%}
+![](img/one-sided-window.png)
 
 
 # Data movement operations
@@ -84,31 +84,32 @@ lang:   en
 </div>
 
 <div class="column">
-![](img/one-sided-epoch.svg){width=70%}
+![](img/one-sided-epoch.png)
 </div>
 
 # Key MPI functions for ONE-sided communication {.section}
 
 
-# Creating an window
-
-<small>
+# Creating an window {.split-definition}
 
 `MPI_Win_create(base, size, disp_unit, info, comm, win)`
   : `base` {.input}
     : (pointer to) local memory to expose for RMA
-  : `size` {.input}
-    : size of a window in bytes
-  : `disp_unit` {.input}
-    : local unit size for displacements in bytes
-  : `info` {.input}
-    : hints for implementation
-  : `comm` {.input}
-    : communicator
-  : `win` {.output}
-    : handle to window
 
-</small>
+    `size` {.input}
+    : size of a window in bytes
+
+    `disp_unit` {.input}
+    : local unit size for displacements in bytes
+
+    `info` {.input}
+    : hints for implementation
+
+    `comm` {.input}
+    : communicator
+
+    `win` {.output}
+    : handle to window
 
 - The window object is deallocated with `MPI_Win_free(win)`
 
@@ -119,7 +120,8 @@ lang:   en
   : `assert` {.input}
     : optimize for specific usage. Valid values are "0", `MPI_MODE_NOSTORE`,
       `MPI_MODE_NOPUT`, `MPI_MODE_NOPRECEDE`, `MPI_MODE_NOSUCCEED`
-  : `win` {.input}
+
+    `win` {.input}
     : window handle
 
 - Used both for starting and ending an epoch
@@ -243,7 +245,7 @@ MPI_Win_free(&window);
 - Compatibility of local and remote operations when multiple processes
   access a window during an epoch
 
-![](img/one-sided-limitations.svg){width=70%}
+![](img/one-sided-limitations.png)
 
 
 # Advanced synchronization:
