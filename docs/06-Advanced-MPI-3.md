@@ -276,7 +276,7 @@ MPI_Win_free(&window);
     - End: `MPI_Win_wait`
 - Origin: Access epoch
     - Start: `MPI_Win_start`
-    - End: `MPI_Win_compete`
+    - End: `MPI_Win_complete`
 
 
 # Enhancements in MPI-3
