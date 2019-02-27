@@ -1,5 +1,5 @@
 ---
-title:  Advanced User-defined datatypes
+title:  Advanced user-defined datatypes
 author: CSC Training
 date:   2019-02
 lang:   en
@@ -28,7 +28,7 @@ lang:   en
     - Larger messages, count is `int` in C
 - Provide higher level of programming
     - Code is more compact and maintainable
-- Needed for getting the most out of MPI I/O
+- Needed for getting the most out of MPI-IO
 
 
 # User-defined datatypes
@@ -158,20 +158,16 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 
 ```c
 /* Structure for particles */
-
 struct ParticleStruct {
     int charge;         /* particle charge */
     double coord[3];    /* particle coords */
     double velocity[3]; /* particle velocity vector components */
 };
-
 struct ParticleStruct particle[1000];
 MPI_Datatype Particletype;
-
 MPI_Datatype type[3]={MPI_INT, MPI_DOUBLE, MPI_DOUBLE};
 int blocklen[3]={1,3,3};
 MPI_Aint disp[3]={0, sizeof(double), 4*sizeof(double)};
-
 ...
 
 MPI_Type_create_struct(3, blocklen, disp, type, &Particletype);
@@ -221,8 +217,6 @@ MPI_Get_address(&particle[0].velocity, &disp[2]);
 disp[2] -= disp[0];
 disp[1] -= disp[0];
 disp[0] = 0;
-
-...
 ```
 
 # Gaps between datatypes
@@ -296,7 +290,7 @@ MPI_Aint lb, extent;
 
 ...
 
-/* Check that the extent is correct
+/* Check that the extent is correct */
 MPI_Type_get_extent(particletype, &lb, &extent);
 if ( extent != sizeof(particle[0] ) {
     oldtype = particletype;
@@ -316,7 +310,6 @@ struct ParticleStruct particle[1000];
 int psize;
 
 psize = sizeof(particle[0]);
-
 MPI_Send(particle, 1000*psize, MPI_BYTE, ...);
 ```
 
