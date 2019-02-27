@@ -74,6 +74,7 @@ look like
 #SBATCH -e err.%j
 #SBATCH -p test
 #SBATCH --nodes=2
+#SBATCH --reservation=advpar_course
 aprun -n 48 ./my_mpi_exe
 ```
 
