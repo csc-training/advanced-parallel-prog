@@ -14,6 +14,8 @@ An initial temperature field is available in the file
 [common/bottle.dat](common/bottle.dat) (the file consists of a header and 200
 x 200 data array). Boundaries are fixed a to constant value.
 
+![img](bottle.png)
+
 
 ### Theory: Two dimensional heat equation
 
