@@ -240,7 +240,7 @@ end program output
 - Wait for completion using `MPI_Test`, `MPI_Wait`, etc.
 - Can be used to overlap I/O with computation:
 
-![](img/nonblocking-io.png)
+![](img/nonblocking-io.png){.center}
 
 
 # Non-contiguous data access with MPI-IO {.section}
