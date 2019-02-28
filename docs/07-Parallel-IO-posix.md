@@ -42,13 +42,13 @@ lang:   en
 
 # I/O library choice
 
-- POSIX and MPI I/O libraries
+- POSIX and MPI-IO libraries
     - Provides methods for writing raw data into files
     - Do not provide a schema or methods for writing metadata
     - The user has to develop a file format specification, or implement a
       given format
 - Additionally there are also higher level libraries that
-    - Gives tools for writing data + metadata, e.g., HDF5
+    - Gives tools for writing data + metadata, e.g. HDF5
     - Or even provide a application or domain specific schema for what
       data + metadata to describe a particular kind of data
 
@@ -88,7 +88,7 @@ lang:   en
 - Striping pattern of a file/directory can be queried or set with the
   `lfs` command
 - `lfs getstripe` <*dir*|*file*>
-- `lfs setstripe` –c *count* *dir*
+- `lfs setstripe` -c *count* *dir*
     - Set the default stripe count for directory *dir* to *count*
     - All the new files within the directory will have the specified
     striping
@@ -124,15 +124,15 @@ lang:   en
 ```fortran
 if (my_id == 0) then
     do i = 1, ntasks-1
-        call mpi_recv(full_data(i*n), n, & MPI_REAL, i, tag, &
-        MPI_COMM_WORLD, status, rc)
+        call mpi_recv(full_data(i*n), n, MPI_REAL, i, tag, &
+                      MPI_COMM_WORLD, status, rc)
     end do
 
     open(funit, file=fname, access="stream")
     write(funit) full_data
     close(funit)
 else
-    call mpi_send(data, n, & MPI_REAL, 0, tag, & MPI_COMM_WORLD, rc)
+    call mpi_send(data, n, MPI_REAL, 0, tag, MPI_COMM_WORLD, rc)
 end if
 ```
 
@@ -144,7 +144,7 @@ end if
 - Disable debugging messages when running in production mode
     - "Hello, I'm task 32,000!"
 - Ensure only the very minimum is written to the stdout/err!
-    - Interim results, timings,…
+    - Interim results, timings,...
 
 
 # Parallel POSIX I/O
