@@ -28,7 +28,7 @@ int main(int argc, char *argv[])
       for (j=0; j < 3; j++)
         particles[i].coords[j] = (float)rand()/(float)RAND_MAX*10.0;
       particles[i].charge = 54;
-      strcpy(particles[i].label, "Xe");
+      strcpy(particles[i].label, "H");
     }
   }
   /* define the datatype for the struct particle */
