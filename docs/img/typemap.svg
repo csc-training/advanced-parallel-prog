@@ -15,7 +15,7 @@
    id="svg2"
    version="1.1"
    sodipodi:docname="typemap.svg"
-   inkscape:version="0.92.3 (2405546, 2018-03-11)"><sodipodi:namedview
+   inkscape:version="0.92.2 (5c3e80d, 2017-08-06)"><sodipodi:namedview
      pagecolor="#ffffff"
      bordercolor="#666666"
      borderopacity="1"
@@ -24,14 +24,14 @@
      guidetolerance="10"
      inkscape:pageopacity="0"
      inkscape:pageshadow="2"
-     inkscape:window-width="1293"
-     inkscape:window-height="593"
+     inkscape:window-width="1920"
+     inkscape:window-height="1016"
      id="namedview5851"
      showgrid="false"
      inkscape:zoom="0.84154521"
-     inkscape:cx="445.60886"
-     inkscape:cy="56.000488"
-     inkscape:window-x="67"
+     inkscape:cx="450.36202"
+     inkscape:cy="51.247327"
+     inkscape:window-x="0"
      inkscape:window-y="27"
      inkscape:window-maximized="1"
      inkscape:current-layer="svg2" /><metadata
@@ -320,5 +320,9 @@
        sodipodi:role="line"
        id="tspan10094"
        x="370.36975"
-       y="80.26989">Typemap = { (Int, 0), (double, 8), (char, 16)}</tspan></text>
-</svg>
+       y="80.26989">Typemap = {(Int, 0), (double, 8), (char, 16)}</tspan></text>
+<path
+     id="path9728-4"
+     style="fill:#ffff00;fill-opacity:1;stroke:#000000;stroke-width:1.00099993;stroke-linecap:butt;stroke-linejoin:miter;stroke-miterlimit:10;stroke-dasharray:none;stroke-opacity:1"
+     d="m 819.63321,49.5425 h 25 V 11.54251 h -25 z"
+     inkscape:connector-curvature="0" /></svg>

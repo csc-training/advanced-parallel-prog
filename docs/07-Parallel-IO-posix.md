@@ -13,7 +13,7 @@ lang:   en
 - How to get the data efficiently from thousands of nodes of a
   supercomputer to physical disks?
 
-![](img/io-illustration.png)
+![](img/io-illustration.png){.center}
 
 
 # Parallel I/O
@@ -98,7 +98,7 @@ lang:   en
 
 # Performance with Lustre striping on Sisu
 
-FIXME: missing figure
+![](img/striping-performance.png){.center width=60%}
 
 
 # Parallel I/O with posix {.section}

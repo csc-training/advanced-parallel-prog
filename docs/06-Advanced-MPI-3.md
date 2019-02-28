@@ -45,7 +45,7 @@ lang:   en
 - Windows are created by collective calls
 - Windows may be different in different processes
 
-![](img/one-sided-window.png)
+![](img/one-sided-window.png){.center}
 
 
 # Data movement operations
@@ -87,7 +87,8 @@ lang:   en
 ![](img/one-sided-epoch.png)
 </div>
 
-# Key MPI functions for ONE-sided communication {.section}
+
+# Key MPI functions for one-sided communication {.section}
 
 
 # Creating an window {.split-definition}
@@ -276,7 +277,7 @@ MPI_Win_free(&window);
     - End: `MPI_Win_wait`
 - Origin: Access epoch
     - Start: `MPI_Win_start`
-    - End: `MPI_Win_compete`
+    - End: `MPI_Win_complete`
 
 
 # Enhancements in MPI-3
@@ -306,7 +307,7 @@ MPI_Win_free(&window);
 
 # OSU benchmark example
 
-FIXME: missing figure
+![](img/osu-benchmark.png)
 
 
 # Summary
