@@ -146,7 +146,7 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
     `types` {.input}
     : types of blocks (array)
 
-    `newtype` {.input}
+    `newtype` {.output}
     : new datatype
 
     `-` {.ghost}
