@@ -20,15 +20,14 @@ program heat_solve
 
   type(parallel_data) :: parallelization
   integer :: ierr, provided, thread_id
-
   integer :: iter
 
   real(dp) :: start, stop ! Timers
 
-  call mpi_init_thread(MPI_THREAD_MULTIPLE,provided,ierr)
+  call mpi_init_thread(MPI_THREAD_MULTIPLE, provided, ierr)
   if (provided < MPI_THREAD_MULTIPLE) then
      write (*,*) ' MPI_THREAD_MULTIPLE required for the thread support level '
-     call mpi_abort(mpi_comm_world, 5, ierr)
+     call mpi_abort(MPI_COMM_WORLD, 5, ierr)
   end if
 !$OMP PARALLEL PRIVATE(iter, thread_id)
   call initialize(current, previous, nsteps, parallelization)

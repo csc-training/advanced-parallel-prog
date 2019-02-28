@@ -18,13 +18,16 @@ program heat_solve
   integer, parameter :: image_interval = 500 ! Image output interval
 
   type(parallel_data) :: parallelization
+  integer :: iter, provided
   integer :: ierr
-
-  integer :: iter
 
   real(kind=dp) :: start, stop ! Timers
 
-  call mpi_init(ierr)
+  call mpi_init_thread(MPI_THREAD_FUNNELED, provided, ierr)
+  if (provided < MPI_THREAD_FUNNELED) then
+     write (*,*) ' MPI_THREAD_FUNNELED required for the the thread support level '
+     call mpi_abort(MPI_COMM_WORLD, 5, ierr)
+  end if
 
   call initialize(current, previous, nsteps, parallelization)
 

@@ -34,8 +34,8 @@ int main(int argc, char **argv)
 
     MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
     if (provided < MPI_THREAD_MULTIPLE) {
-       printf("MPI_THREAD_MULTIPLE thread support level required\n");
-       MPI_Abort(MPI_COMM_WORLD,5);
+        printf("MPI_THREAD_MULTIPLE thread support level required\n");
+        MPI_Abort(MPI_COMM_WORLD,5);
     }
 
 #pragma omp parallel private(iter, thread_id)

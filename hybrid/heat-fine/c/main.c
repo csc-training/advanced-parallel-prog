@@ -27,7 +27,13 @@ int main(int argc, char **argv)
 
     double start_clock;        //!< Time stamps
 
-    MPI_Init(&argc, &argv);
+    int provided;              //!< Thread-support level
+
+    MPI_Init_thread(&argc, &argv, MPI_THREAD_MULTIPLE, &provided);
+    if (provided < MPI_THREAD_FUNNELED) {
+      printf("MPI_THREAD_FUNNELED thread support level required\n");
+      MPI_Abort(MPI_COMM_WORLD, 5);
+    }
 
     initialize(argc, argv, &current, &previous, &nsteps, &parallelization);
 
