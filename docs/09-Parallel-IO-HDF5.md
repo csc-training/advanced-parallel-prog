@@ -118,12 +118,12 @@ DATA {
 # Creating and opening an HDF5 file
 
 - In order to open or create file user must define
-- File access mode
-    - `H5F_ACC_EXCL` or `H5F_ACC_TRUNC` in create
-    - `H5F_ACC_RDONLY` or `H5F_ACC_RDWR` in open
-- File creation property list (only in create)
-- File access property list
-    - `H5P_DEFAULT` can be used for the default property list
+    - File access mode
+        - `H5F_ACC_EXCL` or `H5F_ACC_TRUNC` in create
+        - `H5F_ACC_RDONLY` or `H5F_ACC_RDWR` in open
+    - File creation property list (only in create)
+    - File access property list
+        - `H5P_DEFAULT` can be used for the default property list
 
 
 # Creating / opening a file
@@ -261,6 +261,7 @@ int main(int argc, char *argv[]) {
     - count number of blocks to select
     - block size of the block
 
+
 # Data selection with hyperslab
 
 ![](img/hdf5-hyperslab.png)
@@ -268,7 +269,7 @@ int main(int argc, char *argv[]) {
 ```c
 ...
     hsize_t     offset[2] = {0, 1};
-    hsize_t     stride[2] = {4, 1;
+    hsize_t     stride[2] = {4, 1};
     hsize_t     count[2]  = {2, 1};
     hsize_t     block[2]  = {2, 1};
 
