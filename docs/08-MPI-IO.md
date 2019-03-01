@@ -50,7 +50,7 @@ lang:   en
     : communicator that performs parallel I/O
 
     `mode` {.input}
-    : `MPI_MODE_RDONLY`, `MPI_MODE_WRONLY`, `I_MODE_CREATE`,
+    : `MPI_MODE_RDONLY`, `MPI_MODE_WRONLY`, `MPI_MODE_CREATE`,
       `MPI_MODE_RDWR`, ...
 
         - Mode parameters can be combined with + in Fortran and | in C/C++
@@ -83,7 +83,7 @@ lang:   en
     : datatype of elements to write
 
     `status` {.output}
-    : similar to status in MPI_Recv, stores number of elements actually
+    : similar to status in `MPI_Recv`, stores number of elements actually
       written
 
 
@@ -149,7 +149,7 @@ end program output
     : datatype of elements to read
 
     `status` {.output}
-    : similar to status in MPI_Recv, stores number of elements actually read
+    : similar to status in `MPI_Recv`, stores number of elements actually read
 
 
 # Setting file pointer
@@ -315,7 +315,7 @@ call mpi_file_set_view(file, disp, mpi_integer, filetype, 'native', &
 call mpi_file_write_all(file, buffer, count, mpi_integer, status, err)
 ```
 
-# Common mistakes with MPI I/O
+# Common mistakes with MPI-IO
 
 - Not defining file offsets as `MPI_Offset` in C and integer
   (`kind=MPI_OFFSET_KIND`) in Fortran
