@@ -271,11 +271,11 @@ end program output
 
     `datarep` {.input}
     : Data representation (can be adjusted for portability)
-    : "native": store in same format as in memory
+    : `"native"`: store in same format as in memory
 
     `info` {.input}
     : Hints for implementation that can improve performance
-      `MPI_INFO_NULL`: No hints
+      (`MPI_INFO_NULL`: no hints)
 
 
 # File view
