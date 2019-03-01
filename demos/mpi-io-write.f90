@@ -16,15 +16,17 @@ program mpiio
   localsize = datasize / ntasks
   allocate(localvector(localsize))
 
-  localvector = [(i + my_id * localsize, i=1,localsize)]
+  do i = 1, localsize
+      localvector(i) = i + my_id * localsize
+  end do
 
   call mpi_type_size(MPI_INTEGER, dsize, rc)
   offset = my_id * localsize * dsize
 
   call mpi_file_open(MPI_COMM_WORLD, 'output.dat', &
-       & MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, rc)
+                     MPI_MODE_CREATE+MPI_MODE_WRONLY, MPI_INFO_NULL, fh, rc)
   call mpi_file_write_at_all(fh, offset, localvector, localsize, &
-       & MPI_INTEGER, MPI_STATUS_IGNORE, rc)
+                             MPI_INTEGER, MPI_STATUS_IGNORE, rc)
   call mpi_file_close(fh, rc)
 
   deallocate(localvector)
