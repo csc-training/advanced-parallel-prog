@@ -14,7 +14,7 @@ lang:   en
 - Traditional relational databases poor fit
     - Cannot handle large objects
     - Many unnecessary features for HPC data
-- MPI I/O is efficient but relatively low level
+- MPI-IO is efficient but relatively low level
 
 
 # I/O libraries
@@ -23,7 +23,7 @@ lang:   en
     - Portable files that can be manipulated with external software
 - Typically, I/O libraries support also metadata
     - Self-describing files
-- Parallel I/O is typically build on top of MPI I/O
+- Parallel I/O is typically build on top of MPI-IO
 - **HDF5**, **NetCDF**, ADIOS, SIONlib
 
 
