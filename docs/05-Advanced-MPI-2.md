@@ -48,13 +48,13 @@ lang:   en
 - A new datatype must be committed before using it
 
     `MPI_Type_commit(newtype)`
-      : `newtype` {.input}
+      : `newtype`{.input}
         : the new datatype to commit
 
 - A type should be freed after it is no longer needed
 
     `MPI_Type_free(newtype)`
-      : `newtype` {.input}
+      : `newtype`{.input}
         : the datatype for decommision
 
 
@@ -134,19 +134,19 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT {.split-definition}
 
 `MPI_Type_create_struct(count, blocklens, displs, types, newtype)`
-  : `count` {.input}
+  : `count`{.input}
     : number of blocks
 
-    `blocklens` {.input}
+    `blocklens`{.input}
     : lengths of blocks (array)
 
-    `displs` {.input}
+    `displs`{.input}
     : displacements of blocks in bytes (array)
 
-    `types` {.input}
+    `types`{.input}
     : types of blocks (array)
 
-    `newtype` {.output}
+    `newtype`{.output}
     : new datatype
 
     `-` {.ghost}
@@ -185,10 +185,10 @@ MPI_Type_free(&Particletype);
 - The displacements can (and should!) be determined by using the function
 
 `MPI_Get_address(pointer, address)`
-  : `pointer` {.input}
+  : `pointer`{.input}
     : variable (pointer to it) which address to determine
 
-    `address` {.output}
+    `address`{.output}
     : address of the variable, type is
 
         - `MPI_Aint` (C)
@@ -251,29 +251,29 @@ disp[0] = 0;
 # Getting extent and lower bound
 
 `MPI_Type_get_extent(type, lb, extent)`
-  : `type` {.input}
+  : `type`{.input}
     : Datatype
 
-    `lb` {.output}
+    `lb`{.output}
     : Lower bound of type (in bytes)
 
-    `extent` {.output}
+    `extent`{.output}
     : Extent of type (in bytes)
 
 
 # Setting extent and lower bound
 
 `MPI_Type_create_resized(type, lb, extent, newtype)`
-  : `type` {.input}
+  : `type`{.input}
     : Old datatype
 
-    `lb` {.input}
+    `lb`{.input}
     : New lower bound (in bytes)
 
-    `extent` {.input}
+    `extent`{.input}
     : New extent (in bytes)
 
-    `newtype` {.output}
+    `newtype`{.output}
     : New datatype, commit before use
 
 # Multiple MPI_TYPE_VECTORs

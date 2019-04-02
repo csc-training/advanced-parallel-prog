@@ -27,23 +27,23 @@ lang:   en
 # Communicator in Cartesian grid: MPI_Cart_create {.split-definition}
 
 `MPI_Cart_create(oldcomm, ndims, dims, periods, reorder, newcomm)`
-  : `oldcomm` {.input}
+  : `oldcomm`{.input}
     : communicator
 
-    `ndims` {.input}
+    `ndims`{.input}
     : number of dimensions
 
-    `dims` {.input}
+    `dims`{.input}
     : integer array (size ndims) that defines the number of processes in each
       dimension
 
-    `periods` {.input}
+    `periods`{.input}
     : array that defines the periodicity of each dimension
 
-    `reorder` {.input}
+    `reorder`{.input}
     : is MPI allowed to renumber the ranks
 
-    `newcomm` {.output}
+    `newcomm`{.output}
     : new Cartesian communicator
 
 
@@ -53,13 +53,13 @@ lang:   en
   specific rank
 
 `MPI_Cart_coords(comm, rank, maxdim, coords)`
-  : `comm` {.input}
+  : `comm`{.input}
     : Cartesian communicator
-  : `rank` {.input}
+  : `rank`{.input}
     : rank to convert
-  : `maxdim` {.input}
+  : `maxdim`{.input}
     : dimension of coords
-  : `coords` {.output}
+  : `coords`{.output}
     : coordinates in Cartesian topology that corresponds to rank
 
 
@@ -69,11 +69,11 @@ lang:   en
   topology coordinates
 
 `MPI_Cart_rank(comm, coords, rank)`
-  : `comm` {.input}
+  : `comm`{.input}
     : Cartesian communicator
-  : `coords` {.input}
+  : `coords`{.input}
     : array of coordinates
-  : `rank` {.output}
+  : `rank`{.output}
     : a rank corresponding to coords
 
 
@@ -93,15 +93,15 @@ call mpi_cart_coords(comm2d, my_id, 2, coords, rc)
 # How to communicate in a Cartesian topology
 
 `MPI_Cart_shift(comm, direction, displ, source, dest)`
-  : `comm` {.input}
+  : `comm`{.input}
     : Cartesian communicator
-  : `direction` {.input}
+  : `direction`{.input}
     : shift direction (0 or 1 in 2D)
-  : `displ` {.input}
+  : `displ`{.input}
     : shift displacement (1 for next cell etc, < 0 for source from "down"/"right" directions)
-  : `source` {.output}
+  : `source`{.output}
     : rank of source process
-  : `dest` {.output}
+  : `dest`{.output}
     : rank of destination process
 
 - "Shifts" (steps) within the grid define sources/destinations

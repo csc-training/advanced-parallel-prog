@@ -94,22 +94,22 @@ lang:   en
 # Creating an window {.split-definition}
 
 `MPI_Win_create(base, size, disp_unit, info, comm, win)`
-  : `base` {.input}
+  : `base`{.input}
     : (pointer to) local memory to expose for RMA
 
-    `size` {.input}
+    `size`{.input}
     : size of a window in bytes
 
-    `disp_unit` {.input}
+    `disp_unit`{.input}
     : local unit size for displacements in bytes
 
-    `info` {.input}
+    `info`{.input}
     : hints for implementation
 
-    `comm` {.input}
+    `comm`{.input}
     : communicator
 
-    `win` {.output}
+    `win`{.output}
     : handle to window
 
 - The window object is deallocated with `MPI_Win_free(win)`
@@ -118,11 +118,11 @@ lang:   en
 # Starting and ending an epoch
 
 `MPI_Win_fence(assert, win)`
-  : `assert` {.input}
+  : `assert`{.input}
     : optimize for specific usage. Valid values are "0", `MPI_MODE_NOSTORE`,
       `MPI_MODE_NOPUT`, `MPI_MODE_NOPRECEDE`, `MPI_MODE_NOSUCCEED`
 
-    `win` {.input}
+    `win`{.input}
     : window handle
 
 - Used both for starting and ending an epoch
@@ -133,87 +133,87 @@ lang:   en
 # Data movement: Put {.split-definition}
 
 `MPI_Put(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, win)`
-  : `origin` {.input}
+  : `origin`{.input}
     : (pointer to) local data to be sent to target
 
-    `origin_count` {.input}
+    `origin_count`{.input}
     : number of elements to put
 
-    `origin_datatype` {.input}
+    `origin_datatype`{.input}
     : MPI datatype for local data
 
-    `target_rank` {.input}
+    `target_rank`{.input}
     : rank of the target task
 
-    `target_disp` {.input}
+    `target_disp`{.input}
     : starting point in target window
 
-    `target_count` {.input}
+    `target_count`{.input}
     : number of elements in target
 
-    `target_datatype` {.input}
+    `target_datatype`{.input}
     : MPI datatype for remote data
 
-    `win` {.input}
+    `win`{.input}
     : RMA window
 
 
 # Data movement: Get {.split-definition}
 
 `MPI_Get(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, win)`
-  : `origin` {.input}
+  : `origin`{.input}
     : (pointer to) local buffer in which to receive the data
 
-    `origin_count` {.input}
+    `origin_count`{.input}
     : number of elements to get
 
-    `origin_datatype` {.input}
+    `origin_datatype`{.input}
     : MPI datatype for local data
 
-    `target_rank` {.input}
+    `target_rank`{.input}
     : rank of the target task
 
-    `target_disp` {.input}
+    `target_disp`{.input}
     : starting point in target window
 
-    `target_count` {.input}
+    `target_count`{.input}
     : number of elements from target
 
-    `target_datatype` {.input}
+    `target_datatype`{.input}
     : MPI datatype for remote data
 
-    `win` {.input}
+    `win`{.input}
     : RMA window
 
 
 # Data movement: Accumulate {.split-def-3}
 
 `MPI_Accumulate(origin, origin_count, origin_datatype, target_rank, target_disp, target_count, target_datatype, win)`
-  : `origin` {.input}
+  : `origin`{.input}
     : (pointer to) local data to be accumulated
 
-    `origin_count` {.input}
+    `origin_count`{.input}
     : number of elements to put
 
-    `origin_datatype` {.input}
+    `origin_datatype`{.input}
     : MPI datatype for local data
 
-    `target_rank` {.input}
+    `target_rank`{.input}
     : rank of the target task
 
-    `target_disp` {.input}
+    `target_disp`{.input}
     : starting point in target window
 
-    `target_count` {.input}
+    `target_count`{.input}
     : number of elements for target
 
-    `target_datatype` {.input}
+    `target_datatype`{.input}
     : MPI datatype for remote data
 
-    `op` {.input}
+    `op`{.input}
     : accumulation operation (as in `MPI_Reduce`)
 
-    `win` {.input}
+    `win`{.input}
     : RMA window
 
 
