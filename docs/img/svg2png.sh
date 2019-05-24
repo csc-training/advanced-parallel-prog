@@ -1,0 +1,31 @@
+#!/bin/bash
+# convert SVGs to PNGs with a correct size
+inkscape affinity.svg -e affinity.png -w 709
+inkscape collective-patterns.svg -e collective-patterns.png -w 1594
+inkscape communication-schematic.svg -e communication-schematic.png -w 443
+inkscape communicators.svg -e communicators.png -w 1418
+inkscape fortran-array-layout.svg -e fortran-array-layout.png -w 709
+inkscape hdf5-hyperslab.svg -e hdf5-hyperslab.png -w 532
+inkscape io-illustration.svg -e io-illustration.png -w 1240
+inkscape io-layers.svg -e io-layers.png -w 1772
+inkscape io-subarray.svg -e io-subarray.png -w 1418
+inkscape lustre-architecture.svg -e lustre-architecture.png -w 1772
+inkscape lustre-striping.svg -e lustre-striping.png -w 1772
+inkscape mpi-summary.svg -e mpi-summary.png -w 1418
+inkscape mpi-thread-support.svg -e mpi-thread-support.png -w 1772
+inkscape multiple-thread-communication.svg -e multiple-thread-communication.png -w 886
+inkscape nonblocking-io.svg -e nonblocking-io.png -w 1240
+inkscape omp-parallel.svg -e omp-parallel.png -w 443
+inkscape omp-summary.svg -e omp-summary.png -w 1418
+inkscape one-sided-epoch.svg -e one-sided-epoch.png -w 620
+inkscape one-sided-limitations.svg -e one-sided-limitations.png -w 1240
+inkscape one-sided-window.svg -e one-sided-window.png -w 708
+inkscape posix-everybody.svg -e posix-everybody.png -w 620
+inkscape posix-spokesman.svg -e posix-spokesman.png -w 620
+inkscape processes-threads.svg -e processes-threads.png -w 1594
+inkscape supercomputer-node-hybrid.svg -e supercomputer-node-hybrid.png -w 1772
+inkscape two-d-cartesian-grid.svg -e two-d-cartesian-grid.png -w 886
+inkscape type-struct.svg -e type-struct.png -w 1240
+inkscape typemap.svg -e typemap.png -w 1418
+inkscape vector-extent.svg -e vector-extent.png -w 1772
+inkscape vector-resize.svg -e vector-resize.png -w 1772
