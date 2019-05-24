@@ -1,0 +1,414 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="CSC Training">
+  <title>Hybrid MPI+OpenMP programming</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/reveal.css">
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="theme/csc-2016/csc.css" id="theme">
+  <link rel="stylesheet" href="theme/csc-2016/fonts.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'theme/csc-2016/pdf.css' : 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section class="slide level1 title-slide" data-background-size="contain" data-background="theme/csc-2016/img/title-en.png">
+  <h1>Hybrid MPI+OpenMP programming</h1>
+  <p>CSC Training, 2019-02</p>
+</section>
+
+<section id="processes-and-threads" class="slide level1" data-background-size="contain">
+<h1>Processes and threads</h1>
+<figure>
+<img src="img/processes-threads.png" />
+</figure>
+<div class="column">
+<h2 id="process">Process</h2>
+<ul>
+<li>Independent execution units</li>
+<li>Have their own state information and <em>own memory</em> address space</li>
+</ul>
+</div>
+<div class="column">
+<h2 id="thread">Thread</h2>
+<ul>
+<li>A single process may contain multiple threads</li>
+<li>Have their own state information, but <em>share</em> the <em>same memory</em> address space</li>
+</ul>
+</div>
+</section>
+<section id="processes-and-threads-1" class="slide level1" data-background-size="contain">
+<h1>Processes and threads</h1>
+<figure>
+<img src="img/processes-threads.png" />
+</figure>
+<div class="column">
+<h2 id="process-1">Process</h2>
+<ul>
+<li>Long-lived: spawned when parallel program started, killed when program is finished</li>
+<li>Explicit communication between processes</li>
+</ul>
+</div>
+<div class="column">
+<h2 id="thread-1">Thread</h2>
+<ul>
+<li>Short-lived: created when entering a parallel region, destroyed (joined) when region ends</li>
+<li>Communication through shared memory</li>
+</ul>
+</div>
+</section>
+<section id="hybrid-programming" class="slide level1 section-slide" data-background-size="contain" data-background="theme/default/img/section.png">
+<h1>Hybrid programming</h1>
+</section>
+<section id="hybrid-programming-launch-threads-openmp-within-processes-mpi" class="slide level1" data-background-size="contain">
+<h1>Hybrid programming: Launch threads (OpenMP) <em>within</em> processes (MPI)</h1>
+<div class="column">
+<h2 id="process-2">Process</h2>
+<ul>
+<li>Independent execution units</li>
+<li>MPI launches N processes at application startup</li>
+</ul>
+</div>
+<div class="column">
+<h2 id="thread-2">Thread</h2>
+<ul>
+<li>Threads share memory space</li>
+<li>Threads are created and destroyed (parallel regions)</li>
+</ul>
+</div>
+</section>
+<section id="hybrid-programming-1" class="slide level1" data-background-size="contain">
+<h1>Hybrid programming</h1>
+<div class="column">
+<ul>
+<li>Shared memory programming inside a node, message passing between nodes</li>
+<li>Matches well modern supercomputer hardware</li>
+<li>Often one MPI task / socket, but one should experiment with the ratio</li>
+</ul>
+</div>
+<div class="column">
+<figure>
+<img src="img/supercomputer-node-hybrid.png" />
+</figure>
+</div>
+</section>
+<section id="example-hybrid-hello" class="slide level1" data-background-size="contain">
+<h1>Example: Hybrid hello</h1>
+<div class="column">
+<div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="pp">#include </span><span class="im">&lt;stdio.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;mpi.h&gt;</span>
+<span class="pp">#include </span><span class="im">&lt;omp.h&gt;</span>
+
+<span class="dt">int</span> main(<span class="dt">int</span> argc, <span class="dt">char</span> *argv[]) {
+    <span class="dt">int</span> my_id, omp_rank;
+    <span class="dt">int</span> provided, required=MPI_THREAD_FUNNELED;
+
+    MPI_Init_thread(&amp;argc, &amp;argv, required,
+                    &amp;provided);
+    MPI_Comm_rank(MPI_COMM_WORLD, &amp;my_id);
+<span class="pp">#pragma omp parallel private(omp_rank)</span>
+{
+    omp_rank = omp_get_thread_num();
+    printf(<span class="st">&quot;I&#39;m thread %d in process %d</span><span class="sc">\n</span><span class="st">&quot;</span>,
+           omp_rank, my_id);
+}
+    MPI_Finalize();
+}</code></pre></div>
+</div>
+<div class="column">
+<pre class="shell"><code>$ cc hybrid-hello.c -o hybrid-hello
+$ aprun -n 2 -d 4 -e OMP_NUM_THREADS=4
+  ./hybrid-hello
+
+I&#39;m thread 0 in process 0
+I&#39;m thread 0 in process 1
+I&#39;m thread 2 in process 1
+I&#39;m thread 3 in process 1
+I&#39;m thread 1 in process 1
+I&#39;m thread 3 in process 0
+I&#39;m thread 1 in process 0
+I&#39;m thread 2 in process 0</code></pre>
+</div>
+</section>
+<section id="thread-support-in-mpi" class="slide level1" data-background-size="contain">
+<h1>Thread support in MPI</h1>
+<figure>
+<img src="img/mpi-thread-support.png" />
+</figure>
+</section>
+<section id="thread-safe-initialization" class="slide level1" data-background-size="contain">
+<h1>Thread safe initialization</h1>
+<dl>
+<dt><code>MPI_Init_thread(required, provided)</code></dt>
+<dd><dl>
+<dt><code class="input">argc</code>, <code class="input">argv</code></dt>
+<dd>Command line arguments in C
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">required</code></dt>
+<dd>Required thread safety level
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">provided</code></dt>
+<dd>Supported thread safety level
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">error</code></dt>
+<dd>Error value; in C/C++ it's the return value of the function, and in Fortran an additional output parameter
+</dd>
+</dl>
+</dd>
+</dl>
+<ul>
+<li>Pre-defined integer constants: <code>MPI_THREAD_SINGLE &lt; MPI_THREAD_FUNNELED &lt; MPI_THREAD_SERIALIZED   &lt; MPI_THREAD_MULTIPLE</code></li>
+</ul>
+</section>
+<section id="hybrid-programming-styles-finecoarse-grained" class="slide level1" data-background-size="contain">
+<h1>Hybrid programming styles: fine/coarse grained</h1>
+<ul>
+<li>Fine-grained
+<ul>
+<li>Use <strong>omp parallel do/for</strong> on the most intensive loops</li>
+<li>Possible to hybridize an existing MPI code with little effort and in parts</li>
+</ul></li>
+<li>Coarse-grained
+<ul>
+<li>Use OpenMP threads to replace MPI tasks</li>
+<li>Whole (or most of) program within the same parallel region</li>
+<li>More likely to scale over the whole node, enables all cores to communicate (if supported by MPI implementation)</li>
+</ul></li>
+</ul>
+</section>
+<section id="potential-advantages-of-the-hybrid-approach" class="slide level1" data-background-size="contain">
+<h1>Potential advantages of the hybrid approach</h1>
+<ul>
+<li>Fewer MPI processes for a given amount of cores
+<ul>
+<li>Improved load balance</li>
+<li>All-to-all communication bottlenecks alleviated</li>
+<li>Decreased memory consumption if an implementation uses replicated data</li>
+</ul></li>
+<li>Additional parallelization levels may be available</li>
+<li>Possibility for dedicating threads for different tasks
+<ul>
+<li>e.g. dedicated communication thread or parallel I/O</li>
+<li>Note that OpenMP worksharing constructs (e.g. OMP DO) will not be applicable when dedicating threads</li>
+</ul></li>
+</ul>
+</section>
+<section id="disadvantages-of-hybridization" class="slide level1" data-background-size="contain">
+<h1>Disadvantages of hybridization</h1>
+<ul>
+<li>Increased overhead from thread creation/destruction</li>
+<li>More complicated programming
+<ul>
+<li>Code readability and maitainability issues</li>
+</ul></li>
+<li>Thread support in MPI and other libraries needs to be considered</li>
+</ul>
+</section>
+<section id="real-world-hybrid-applications" class="slide level1" data-background-size="contain">
+<h1>Real-world hybrid applications</h1>
+<ul>
+<li>Vlasiator – space weather simulations
+<ul>
+<li>Fluid in 6D spatial/velocity space: spatial grid with MPI, velocity grid with OpenMP</li>
+<li>Lower memory footprint and better load balancing</li>
+</ul></li>
+<li>CP2K – electronic structure simulations
+<ul>
+<li>Especially so called hybrid functionals benefit from threading</li>
+<li>Lower memory footprint allows more efficient computations</li>
+</ul></li>
+</ul>
+</section>
+<section id="real-world-hybrid-applications-1" class="slide level1" data-background-size="contain">
+<h1>Real-world hybrid applications</h1>
+<ul>
+<li>Vlasiator, 200 nodes (4800 cores) on Sisu</li>
+</ul>
+<p><small></p>
+<table style="width:100%;">
+<colgroup>
+<col style="width: 17%" />
+<col style="width: 19%" />
+<col style="width: 16%" />
+<col style="width: 23%" />
+<col style="width: 22%" />
+</colgroup>
+<thead>
+<tr class="header">
+<th>Threads per process</th>
+<th>Hyperthreads per core</th>
+<th>MPI ranks per node</th>
+<th>Performance (108 cells/s)</th>
+<th>Memory use per node (GB)</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>1</td>
+<td>1</td>
+<td>24</td>
+<td>1.06</td>
+<td>28.4</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>1</td>
+<td>12</td>
+<td>1.06</td>
+<td>24.6</td>
+</tr>
+<tr class="odd">
+<td>4</td>
+<td>1</td>
+<td>6</td>
+<td>1.04</td>
+<td>22.8</td>
+</tr>
+<tr class="even">
+<td>6</td>
+<td>1</td>
+<td>4</td>
+<td>1.02</td>
+<td>22.2</td>
+</tr>
+<tr class="odd">
+<td>1</td>
+<td>2</td>
+<td>24</td>
+<td>1.35</td>
+<td>28.5</td>
+</tr>
+<tr class="even">
+<td>2</td>
+<td>2</td>
+<td>12</td>
+<td>1.33</td>
+<td>24.6</td>
+</tr>
+<tr class="odd">
+<td>6</td>
+<td>2</td>
+<td>8</td>
+<td>1.32</td>
+<td>23.4</td>
+</tr>
+<tr class="even">
+<td>12</td>
+<td>2</td>
+<td>4</td>
+<td>1.25</td>
+<td>22.2</td>
+</tr>
+</tbody>
+</table>
+<p></small></p>
+</section>
+<section id="summary" class="slide level1" data-background-size="contain">
+<h1>Summary</h1>
+<ul>
+<li>Hybrid programming maps well to modern hardware</li>
+<li>In theory, hybrid programming offers several advantages</li>
+<li>In practice, all the advantages can be difficult to realize</li>
+<li>As number of cores inside a node increases, advantages of hybrid approach are likely to become more and more relevant</li>
+<li>MPI provides different levels of thread support</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/head.min.js"></script>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'none', // none/fade/slide/convex/concave/zoom
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/zoom-js/zoom.js', async: true },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>

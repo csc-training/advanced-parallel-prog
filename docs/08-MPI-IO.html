@@ -1,0 +1,507 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="CSC Training">
+  <title>MPI-IO</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/reveal.css">
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="theme/csc-2016/csc.css" id="theme">
+  <link rel="stylesheet" href="theme/csc-2016/fonts.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'theme/csc-2016/pdf.css' : 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section class="slide level1 title-slide" data-background-size="contain" data-background="theme/csc-2016/img/title-en.png">
+  <h1>MPI-IO</h1>
+  <p>CSC Training, 2019-02</p>
+</section>
+
+<section id="mpi-io" class="slide level1" data-background-size="contain">
+<h1>MPI-IO</h1>
+<ul>
+<li>Defines parallel operations for reading and writing files
+<ul>
+<li>I/O to only one file and/or to many files</li>
+<li>Contiguous and non-contiguous I/O</li>
+<li>Individual and collective I/O</li>
+<li>Asynchronous I/O</li>
+</ul></li>
+<li>Potentially good performance, easy to use (compared to implementing the same patterns on your own)</li>
+<li>Portable programming <em>interface</em>
+<ul>
+<li>By default, binary <em>files</em> are not portable</li>
+</ul></li>
+</ul>
+</section>
+<section id="basic-concepts-in-mpi-io" class="slide level1" data-background-size="contain">
+<h1>Basic concepts in MPI-IO</h1>
+<ul>
+<li>File <em>handle</em>
+<ul>
+<li>data structure which is used for accessing the file</li>
+</ul></li>
+<li>File <em>pointer</em>
+<ul>
+<li><em>position</em> in the file where to read or write</li>
+<li>can be individual for all processes or shared between the processes</li>
+<li>accessed through file handle or provided as an explicit offset from the beginning of the file</li>
+<li>Here we do not use shared file pointers – performance is poor</li>
+</ul></li>
+</ul>
+</section>
+<section id="basic-concepts-in-mpi-io-1" class="slide level1" data-background-size="contain">
+<h1>Basic concepts in MPI-IO</h1>
+<ul>
+<li>File <em>view</em>
+<ul>
+<li>part of a parallel file which is visible to process</li>
+<li>enables efficient noncontiguous access to file</li>
+</ul></li>
+<li><em>Collective</em> and <em>independent</em> I/O
+<ul>
+<li>Collective = MPI coordinates the reads and writes of processes</li>
+<li>Independent = no coordination by MPI, every man for himself</li>
+</ul></li>
+</ul>
+</section>
+<section id="opening-closing-files" class="slide level1" data-background-size="contain">
+<h1>Opening &amp; Closing files</h1>
+<ul>
+<li>All processes in a communicator open a file using</li>
+</ul>
+<dl>
+<dt><code>MPI_File_open(comm, filename, mode, info, fhandle)</code></dt>
+<dd><dl>
+<dt><code class="input">comm</code></dt>
+<dd>communicator that performs parallel I/O
+</dd>
+<dt><code class="input">mode</code></dt>
+<dd><p><code>MPI_MODE_RDONLY</code>, <code>MPI_MODE_WRONLY</code>, <code>I_MODE_CREATE</code>, <code>MPI_MODE_RDWR</code>, ...</p>
+<ul>
+<li>Mode parameters can be combined with + in Fortran and | in C/C++</li>
+</ul>
+</dd>
+<dt><code class="input">info</code></dt>
+<dd>Hints to implementation for optimal performance (No hints: <code>MPI_INFO_NULL</code>)
+</dd>
+<dt><code class="output">fhandle</code></dt>
+<dd>parallel file handle
+</dd>
+</dl>
+</dd>
+</dl>
+<ul>
+<li>File is closed using <code>MPI_File_close(fhandle)</code></li>
+</ul>
+</section>
+<section id="file-writing-at-explicit-location" class="slide level1" data-background-size="contain">
+<h1>File writing at explicit location</h1>
+<dl>
+<dt><code>MPI_File_write_at(fhandle, disp, buffer, count, datatype, status)</code></dt>
+<dd><dl>
+<dt><code class="input">disp</code></dt>
+<dd>displacement in bytes (with the default file view) from the beginning of file
+</dd>
+<dt><code class="input">buffer</code></dt>
+<dd>buffer in memory from where to write the data
+</dd>
+<dt><code class="input">count</code></dt>
+<dd>number of elements in the buffer
+</dd>
+<dt><code class="input">datatype</code></dt>
+<dd>datatype of elements to write
+</dd>
+<dt><code class="output">status</code></dt>
+<dd>similar to status in MPI_Recv, stores number of elements actually written
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="example-parallel-write" class="slide level1" data-background-size="contain">
+<h1>Example: parallel write</h1>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="kw">program</span> output
+<span class="kw">use</span> mpi
+<span class="kw">implicit</span> <span class="kw">none</span>
+
+<span class="dt">integer</span> <span class="dt">::</span> err, i, myid, file, intsize
+<span class="dt">integer</span> <span class="dt">::</span> status(mpi_status_size)
+<span class="dt">integer</span>, <span class="dt">parameter</span> <span class="dt">::</span> <span class="fu">count</span><span class="kw">=</span><span class="dv">100</span>
+<span class="dt">integer</span>, <span class="dt">dimension(count)</span> <span class="dt">::</span> buf
+<span class="dt">integer(kind=mpi_offset_kind)</span> <span class="dt">::</span> disp
+
+<span class="kw">call</span> mpi_init(err)
+<span class="kw">call</span> mpi_comm_rank(mpi_comm_world, myid, err)
+
+<span class="kw">do</span> i <span class="kw">=</span> <span class="dv">1</span>, <span class="fu">count</span>
+    buf(i) <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">count</span> <span class="kw">+</span> i
+<span class="kw">end do</span></code></pre></div>
+<ul>
+<li>First process writes integers 1-100 to the beginning of the file, etc.</li>
+</ul>
+</section>
+<section id="example-parallel-write-1" class="slide level1" data-background-size="contain">
+<h1>Example: parallel write</h1>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran">...
+
+<span class="kw">call</span> mpi_file_open(mpi_comm_world, <span class="st">&#39;test&#39;</span>, <span class="kw">&amp;</span>
+                   mpi_mode_create <span class="kw">+</span> mpi_mode_wronly, <span class="kw">&amp;</span>
+                   mpi_info_null, file, err)
+
+intsize <span class="kw">=</span> sizeof(<span class="fu">count</span>)
+disp <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">count</span> <span class="kw">*</span> intsize
+
+<span class="kw">call</span> mpi_file_write_at(file, disp, buf, <span class="fu">count</span>, mpi_integer, status, err)
+
+<span class="kw">call</span> mpi_file_close(file, err)
+<span class="kw">call</span> mpi_finalize(err)
+
+<span class="kw">end program</span> output</code></pre></div>
+</section>
+<section id="file-reading-at-explicit-location" class="slide level1" data-background-size="contain">
+<h1>File reading at explicit location</h1>
+<dl>
+<dt><code>MPI_File_read_at(fhandle, disp, buffer, count, datatype, status)</code></dt>
+<dd><dl>
+<dt><code class="input">disp</code></dt>
+<dd>displacement in bytes (with the default file view) from the beginning of file
+</dd>
+<dt><code class="output">buffer</code></dt>
+<dd>buffer in memory where to read the data
+</dd>
+<dt><code class="input">count</code></dt>
+<dd>number of elements in the buffer
+</dd>
+<dt><code class="input">datatype</code></dt>
+<dd>datatype of elements to read
+</dd>
+<dt><code class="output">status</code></dt>
+<dd>similar to status in MPI_Recv, stores number of elements actually read
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="setting-file-pointer" class="slide level1" data-background-size="contain">
+<h1>Setting file pointer</h1>
+<ul>
+<li>In previous examples the location for writing or reading was provided explicitly in the <code>write</code> / <code>read</code> calls.</li>
+<li>It is also possible to set the location of file pointer separately with</li>
+</ul>
+<dl>
+<dt><code>MPI_File_seek(fhandle, disp, whence)</code></dt>
+<dd><dl>
+<dt><code class="input">disp</code></dt>
+<dd>displacement in bytes (with the default file view)
+</dd>
+<dt><code class="input">whence</code></dt>
+<dd><code>MPI_SEEK_SET</code>: the pointer is set to <code>disp</code>
+</dd>
+<dd><code>MPI_SEEK_CUR</code>: the pointer is set to the current pointer position plus <code>disp</code>
+</dd>
+<dd><code>MPI_SEEK_END</code>: the pointer is set to the end of file plus <code>disp</code> (can be negative)
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="file-writing-at-file-pointer" class="slide level1" data-background-size="contain">
+<h1>File writing at file pointer</h1>
+<dl>
+<dt><code>MPI_File_write(fhandle, buffer, count, datatype, status)</code></dt>
+<dd><dl>
+<dt><code class="input">buffer</code></dt>
+<dd>buffer in memory which holds the data
+</dd>
+<dt><code class="input">count</code></dt>
+<dd>number of elements to write
+</dd>
+<dt><code class="input">datatype</code></dt>
+<dd>datatype of elements to write
+</dd>
+<dt><code class="output">status</code></dt>
+<dd>status object
+</dd>
+</dl>
+</dd>
+</dl>
+<ul>
+<li>Updates position of individual file pointer after writing
+<ul>
+<li>Not thread safe</li>
+</ul></li>
+</ul>
+</section>
+<section id="file-reading-at-file-pointer" class="slide level1" data-background-size="contain">
+<h1>File reading at file pointer</h1>
+<dl>
+<dt><code>MPI_File_read(fhandle, buffer, count, datatype, status)</code></dt>
+<dd><dl>
+<dt><code class="output">buffer</code></dt>
+<dd>buffer in memory where to store the data
+</dd>
+<dt><code class="input">count</code></dt>
+<dd>number of elements to read
+</dd>
+<dt><code class="input">datatype</code></dt>
+<dd>datatype of elements to read
+</dd>
+<dt><code class="output">status</code></dt>
+<dd>similar to status in <code>MPI_Recv</code>, amount of data read can be determined by <code>MPI_Get_count</code>
+</dd>
+</dl>
+</dd>
+</dl>
+<ul>
+<li>Updates position of individual file pointer after reading
+<ul>
+<li>Not thread safe</li>
+</ul></li>
+</ul>
+</section>
+<section id="collective-operations" class="slide level1" data-background-size="contain">
+<h1>Collective operations</h1>
+<ul>
+<li>I/O can be performed <em>collectively</em> by all processes in a communicator
+<ul>
+<li><code>MPI_File_read_all</code></li>
+<li><code>MPI_File_write_all</code></li>
+<li><code>MPI_File_read_at_all</code></li>
+<li><code>MPI_File_write_at_all</code></li>
+</ul></li>
+<li>Same parameters as in independent I/O functions (<code>MPI_File_read</code> etc.)</li>
+</ul>
+</section>
+<section id="collective-operations-1" class="slide level1" data-background-size="contain">
+<h1>Collective operations</h1>
+<ul>
+<li>All processes in communicator that opened file must call function
+<ul>
+<li>Collective operation</li>
+</ul></li>
+<li>If all processes write or read, you should always use the collective reads and writes.
+<ul>
+<li>Performance much better than for individual functions</li>
+<li>Even if each processor reads a non-contiguous segment, in total the read may be contiguous</li>
+<li>Lots of optimizations implemented in the MPI libraries</li>
+</ul></li>
+</ul>
+</section>
+<section id="non-blocking-mpi-io" class="slide level1" data-background-size="contain">
+<h1>Non-blocking MPI-IO</h1>
+<ul>
+<li>Non-blocking independent I/O is similar to non-blocking send/recv routines
+<ul>
+<li><code>MPI_File_iread(_at)(_all)</code> / <code>MPI_File_iwrite(_at)(_all)</code></li>
+</ul></li>
+<li>Wait for completion using <code>MPI_Test</code>, <code>MPI_Wait</code>, etc.</li>
+<li>Can be used to overlap I/O with computation:</li>
+</ul>
+<figure>
+<img src="img/nonblocking-io.png" class="center" />
+</figure>
+</section>
+<section id="non-contiguous-data-access-with-mpi-io" class="slide level1 section-slide" data-background-size="contain" data-background="theme/default/img/section.png">
+<h1>Non-contiguous data access with MPI-IO</h1>
+</section>
+<section id="file-view" class="slide level1" data-background-size="contain">
+<h1>File view</h1>
+<ul>
+<li>By default, file is treated as consisting of bytes, and process can access (read or write) any byte in the file</li>
+<li>The <em>file view</em> defines which portion of a file is visible to a process</li>
+<li>A file view consists of three components
+<ul>
+<li>displacement: number of bytes to skip from the beginning of file</li>
+<li>etype: type of data accessed, defines unit for offsets</li>
+<li>filetype: portion of file visible to a process</li>
+</ul></li>
+</ul>
+</section>
+<section id="file-view-1" class="slide level1" data-background-size="contain">
+<h1>File view</h1>
+<dl>
+<dt><code>MPI_File_set_view(fhandle, disp, etype, filetype, datarep, info)</code></dt>
+<dd><dl>
+<dt><code class="input">disp</code></dt>
+<dd>Offset from beginning of file. Always in bytes
+</dd>
+<dt><code class="input">etype</code></dt>
+<dd>Basic MPI type or user defined type. Specifies the unit of data access
+</dd>
+<dt><code class="input">filetype</code></dt>
+<dd>Same type as etype or user defined type constructed of etype
+</dd>
+<dt><code class="input">datarep</code></dt>
+<dd>Data representation (can be adjusted for portability)
+</dd>
+<dd>&quot;native&quot;: store in same format as in memory
+</dd>
+<dt><code class="input">info</code></dt>
+<dd>Hints for implementation that can improve performance <code>MPI_INFO_NULL</code>: No hints
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="file-view-2" class="slide level1" data-background-size="contain">
+<h1>File view</h1>
+<ul>
+<li>The values for <code>datarep</code> and the extents of <code>etype</code> must be identical on all processes in the communicator.
+<ul>
+<li>values for <code>disp</code>, <code>filetype</code>, and <code>info</code> may vary.</li>
+</ul></li>
+<li>The datatypes passed in must be committed.</li>
+</ul>
+</section>
+<section id="file-view-for-non-contiguous-data" class="slide level1" data-background-size="contain">
+<h1>File view for non-contiguous data</h1>
+<figure>
+<img src="img/io-subarray.png" />
+</figure>
+<ul>
+<li>Each process has to access small pieces of data scattered throughout a file</li>
+<li>Very expensive if implemented with separate reads/writes</li>
+<li>Use file type to implement the non-contiguous access</li>
+</ul>
+</section>
+<section id="file-view-for-non-contiguous-data-1" class="slide level1" data-background-size="contain">
+<h1>File view for non-contiguous data</h1>
+<figure>
+<img src="img/io-subarray.png" />
+</figure>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="dt">integer</span>, <span class="dt">dimension(2,2)</span> <span class="dt">::</span> array
+...
+<span class="kw">call</span> mpi_type_create_subarray(<span class="dv">2</span>, sizes, subsizes, starts, mpi_integer, <span class="kw">&amp;</span>
+                              mpi_order_c, filetype, err)
+<span class="kw">call</span> mpi_type_commit(filetype)
+
+disp <span class="kw">=</span> <span class="dv">0</span>
+<span class="kw">call</span> mpi_file_set_view(file, disp, mpi_integer, filetype, <span class="st">&#39;native&#39;</span>, <span class="kw">&amp;</span>
+                       mpi_info_null, err)
+
+<span class="kw">call</span> mpi_file_write_all(file, buffer, <span class="fu">count</span>, mpi_integer, status, err)</code></pre></div>
+</section>
+<section id="common-mistakes-with-mpi-io" class="slide level1" data-background-size="contain">
+<h1>Common mistakes with MPI I/O</h1>
+<ul>
+<li>Not defining file offsets as <code>MPI_Offset</code> in C and integer (<code>kind=MPI_OFFSET_KIND</code>) in Fortran</li>
+<li>In Fortran, passing the offset or displacement directly as a constant (e.g. &quot;0&quot;)
+<ul>
+<li>It has to be stored and passed as a variable of type <code>integer(MPI_OFFSET_KIND)</code></li>
+</ul></li>
+</ul>
+</section>
+<section id="performance-dos-and-donts" class="slide level1" data-background-size="contain">
+<h1>Performance do's and don'ts</h1>
+<ul>
+<li>Use collective I/O routines
+<ul>
+<li>Collective write can be over hundred times faster than the individual for large arrays!</li>
+</ul></li>
+<li>Remember to use the correct striping for each file size
+<ul>
+<li>Striping can also be set in the <code>MPI_Info</code> parameter using the <code>MPI_Info_set</code> function: <code>MPI_Info_set(info, &quot;striping_factor&quot;, &quot;20&quot;)</code></li>
+<li>Optimal value system dependent, may be beneficial to benchmark</li>
+</ul></li>
+<li>Minimize metadata operations</li>
+</ul>
+</section>
+<section id="summary" class="slide level1" data-background-size="contain">
+<h1>Summary</h1>
+<ul>
+<li>MPI-IO: MPI library automatically handles all communication needed for parallel I/O access</li>
+<li>File views enable non-contiguous access patterns</li>
+<li>Collective I/O can enable the actual disk access to remain contiguous</li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/head.min.js"></script>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'none', // none/fade/slide/convex/concave/zoom
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/zoom-js/zoom.js', async: true },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>

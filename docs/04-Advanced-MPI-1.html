@@ -1,0 +1,312 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8">
+  <meta name="generator" content="pandoc">
+  <meta name="author" content="CSC Training">
+  <title>MPI Process topologies</title>
+  <meta name="apple-mobile-web-app-capable" content="yes">
+  <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
+  <link rel="stylesheet" href="https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/reveal.css">
+  <style type="text/css">code{white-space: pre;}</style>
+  <style type="text/css">
+div.sourceCode { overflow-x: auto; }
+table.sourceCode, tr.sourceCode, td.lineNumbers, td.sourceCode {
+  margin: 0; padding: 0; vertical-align: baseline; border: none; }
+table.sourceCode { width: 100%; line-height: 100%; }
+td.lineNumbers { text-align: right; padding-right: 4px; padding-left: 4px; color: #aaaaaa; border-right: 1px solid #aaaaaa; }
+td.sourceCode { padding-left: 5px; }
+code > span.kw { color: #007020; font-weight: bold; } /* Keyword */
+code > span.dt { color: #902000; } /* DataType */
+code > span.dv { color: #40a070; } /* DecVal */
+code > span.bn { color: #40a070; } /* BaseN */
+code > span.fl { color: #40a070; } /* Float */
+code > span.ch { color: #4070a0; } /* Char */
+code > span.st { color: #4070a0; } /* String */
+code > span.co { color: #60a0b0; font-style: italic; } /* Comment */
+code > span.ot { color: #007020; } /* Other */
+code > span.al { color: #ff0000; font-weight: bold; } /* Alert */
+code > span.fu { color: #06287e; } /* Function */
+code > span.er { color: #ff0000; font-weight: bold; } /* Error */
+code > span.wa { color: #60a0b0; font-weight: bold; font-style: italic; } /* Warning */
+code > span.cn { color: #880000; } /* Constant */
+code > span.sc { color: #4070a0; } /* SpecialChar */
+code > span.vs { color: #4070a0; } /* VerbatimString */
+code > span.ss { color: #bb6688; } /* SpecialString */
+code > span.im { } /* Import */
+code > span.va { color: #19177c; } /* Variable */
+code > span.cf { color: #007020; font-weight: bold; } /* ControlFlow */
+code > span.op { color: #666666; } /* Operator */
+code > span.bu { } /* BuiltIn */
+code > span.ex { } /* Extension */
+code > span.pp { color: #bc7a00; } /* Preprocessor */
+code > span.at { color: #7d9029; } /* Attribute */
+code > span.do { color: #ba2121; font-style: italic; } /* Documentation */
+code > span.an { color: #60a0b0; font-weight: bold; font-style: italic; } /* Annotation */
+code > span.cv { color: #60a0b0; font-weight: bold; font-style: italic; } /* CommentVar */
+code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Information */
+  </style>
+  <link rel="stylesheet" href="theme/csc-2016/csc.css" id="theme">
+  <link rel="stylesheet" href="theme/csc-2016/fonts.css">
+  <!-- Printing and PDF exports -->
+  <script>
+    var link = document.createElement( 'link' );
+    link.rel = 'stylesheet';
+    link.type = 'text/css';
+    link.href = window.location.search.match( /print-pdf/gi ) ? 'theme/csc-2016/pdf.css' : 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/css/print/paper.css';
+    document.getElementsByTagName( 'head' )[0].appendChild( link );
+  </script>
+  <!--[if lt IE 9]>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/html5shiv.js"></script>
+  <![endif]-->
+</head>
+<body>
+  <div class="reveal">
+    <div class="slides">
+
+<section class="slide level1 title-slide" data-background-size="contain" data-background="theme/csc-2016/img/title-en.png">
+  <h1>MPI Process topologies</h1>
+  <p>CSC Training, 2019-02</p>
+</section>
+
+<section id="process-topologies" class="slide level1" data-background-size="contain">
+<h1>Process topologies</h1>
+<ul>
+<li>MPI process topologies allow for simple referencing scheme of processes
+<ul>
+<li>Process topology defines a new communicator</li>
+<li>We will focus on Cartesian topologies, although graph topologies are also supported</li>
+</ul></li>
+<li>MPI topologies are virtual
+<ul>
+<li>No relation to the physical structure of the computer</li>
+<li>Data mapping &quot;more natural&quot; only to the programmer</li>
+</ul></li>
+<li>Usually no performance benefits
+<ul>
+<li>But code becomes more compact and readable</li>
+</ul></li>
+</ul>
+</section>
+<section id="two-dimensional-domain-decomposition" class="slide level1" data-background-size="contain">
+<h1>Two dimensional domain decomposition</h1>
+<figure>
+<img src="img/two-d-cartesian-grid.png" />
+</figure>
+</section>
+<section id="communicator-in-cartesian-grid-mpi_cart_create" class="slide level1 split-definition" data-background-size="contain">
+<h1>Communicator in Cartesian grid: MPI_Cart_create</h1>
+<dl>
+<dt><code>MPI_Cart_create(oldcomm, ndims, dims, periods, reorder, newcomm)</code></dt>
+<dd><dl>
+<dt><code class="input">oldcomm</code></dt>
+<dd>communicator
+</dd>
+<dt><code class="input">ndims</code></dt>
+<dd>number of dimensions
+</dd>
+<dt><code class="input">dims</code></dt>
+<dd>integer array (size ndims) that defines the number of processes in each dimension
+</dd>
+<dt><code class="input">periods</code></dt>
+<dd>array that defines the periodicity of each dimension
+</dd>
+<dt><code class="input">reorder</code></dt>
+<dd>is MPI allowed to renumber the ranks
+</dd>
+<dt><code class="output">newcomm</code></dt>
+<dd>new Cartesian communicator
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="translating-rank-to-coordinates" class="slide level1" data-background-size="contain">
+<h1>Translating rank to coordinates</h1>
+<ul>
+<li>Checking the Cartesian communication topology coordinates for a specific rank</li>
+</ul>
+<dl>
+<dt><code>MPI_Cart_coords(comm, rank, maxdim, coords)</code></dt>
+<dd><dl>
+<dt><code class="input">comm</code></dt>
+<dd>Cartesian communicator
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">rank</code></dt>
+<dd>rank to convert
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">maxdim</code></dt>
+<dd>dimension of coords
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">coords</code></dt>
+<dd>coordinates in Cartesian topology that corresponds to rank
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="translating-coordinates-to-rank" class="slide level1" data-background-size="contain">
+<h1>Translating coordinates to rank</h1>
+<ul>
+<li>Checking the rank of the process at specific Cartesian communication topology coordinates</li>
+</ul>
+<dl>
+<dt><code>MPI_Cart_rank(comm, coords, rank)</code></dt>
+<dd><dl>
+<dt><code class="input">comm</code></dt>
+<dd>Cartesian communicator
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">coords</code></dt>
+<dd>array of coordinates
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">rank</code></dt>
+<dd>a rank corresponding to coords
+</dd>
+</dl>
+</dd>
+</dl>
+</section>
+<section id="creating-a-cartesian-communication-topology" class="slide level1" data-background-size="contain">
+<h1>Creating a Cartesian communication topology</h1>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran">dims(<span class="dv">1</span>)<span class="kw">=</span><span class="dv">4</span>
+dims(<span class="dv">2</span>)<span class="kw">=</span><span class="dv">4</span>
+period<span class="kw">=(/</span> <span class="cn">.true.</span>, <span class="cn">.true.</span> <span class="kw">/)</span>
+
+<span class="kw">call</span> mpi_cart_create(mpi_comm_world, <span class="dv">2</span>, dims, period, <span class="cn">.true.</span>, comm2d, rc)
+<span class="kw">call</span> mpi_comm_rank(comm2d, my_id, rc)
+<span class="kw">call</span> mpi_cart_coords(comm2d, my_id, <span class="dv">2</span>, coords, rc)</code></pre></div>
+</section>
+<section id="how-to-communicate-in-a-cartesian-topology" class="slide level1" data-background-size="contain">
+<h1>How to communicate in a Cartesian topology</h1>
+<dl>
+<dt><code>MPI_Cart_shift(comm, direction, displ, source, dest)</code></dt>
+<dd><dl>
+<dt><code class="input">comm</code></dt>
+<dd>Cartesian communicator
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">direction</code></dt>
+<dd>shift direction (0 or 1 in 2D)
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="input">displ</code></dt>
+<dd>shift displacement (1 for next cell etc, &lt; 0 for source from &quot;down&quot;/&quot;right&quot; directions)
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">source</code></dt>
+<dd>rank of source process
+</dd>
+</dl>
+</dd>
+<dd><dl>
+<dt><code class="output">dest</code></dt>
+<dd>rank of destination process
+</dd>
+</dl>
+</dd>
+</dl>
+<ul>
+<li>&quot;Shifts&quot; (steps) within the grid define sources/destinations</li>
+</ul>
+</section>
+<section id="how-to-communicate-in-a-cartesian-topology-1" class="slide level1" data-background-size="contain">
+<h1>How to communicate in a Cartesian topology</h1>
+<ul>
+<li>Note! <em>Both</em> <code>source</code> and <code>dest</code> are <em>output</em> parameters. The coordinates of the calling task is implicit input.</li>
+<li>With a non-periodic grid, source or dest can land outside of the grid; then <code>MPI_PROC_NULL</code> is returned.</li>
+</ul>
+</section>
+<section id="halo-exchange" class="slide level1" data-background-size="contain">
+<h1>Halo exchange</h1>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="kw">call</span> mpi_cart_shift(comm2d, <span class="dv">0</span>, <span class="dv">1</span>, nbr_up, nbr_down, rc)
+<span class="kw">call</span> mpi_cart_shift(comm2d, <span class="dv">1</span>, <span class="dv">1</span>, nbr_left, nbr_right, rc)
+...
+
+<span class="co">! left boundaries: send to left, receive from right</span>
+<span class="kw">call</span> mpi_sendrecv(buf(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dv">1</span>, coltype, nbr_left, <span class="kw">&amp;</span>
+    tag_left, buf(<span class="dv">1</span>,n<span class="kw">+</span><span class="dv">1</span>), <span class="dv">1</span>, coltype, nbr_right, <span class="kw">&amp;</span>
+    tag_left, comm2d, mpi_status_ignore, rc)
+
+<span class="co">! right boundaries: send to right, receive from left</span>
+...
+<span class="co">! top boundaries: send to above, receive from below</span>
+<span class="kw">call</span> mpi_sendrecv(buf(<span class="dv">1</span>,<span class="dv">1</span>), <span class="dv">1</span>, rowtype, nbr_up, <span class="kw">&amp;</span>
+    tag_up, buf(n<span class="kw">+</span><span class="dv">1</span>,<span class="dv">1</span>), <span class="dv">1</span>, rowtype, nbr_down, <span class="kw">&amp;</span>
+    tag_up, comm2d, mpi_status_ignore, rc)
+
+<span class="co">! bottom boundaries: send to below, receive from above</span>
+...</code></pre></div>
+</section>
+<section id="summary" class="slide level1" data-background-size="contain">
+<h1>Summary</h1>
+<ul>
+<li>Process topologies provide a convenient referencing scheme for grid-like decompositions</li>
+<li>Usage pattern
+<ul>
+<li>Define a process grid with <code>MPI_Cart_create</code></li>
+<li>Use the obtained new communicator as the comm argument in communication routines
+<ul>
+<li>For getting the ranks of the neighboring processes, use <code>MPI_Cart_shift</code> or wrangle with <code>MPI_Cart_coords</code> and <code>MPI_Cart_rank</code></li>
+</ul></li>
+</ul></li>
+</ul>
+</section>
+    </div>
+  </div>
+
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/head.min.js"></script>
+  <script src="https://mlouhivu.github.io/static-engine/reveal/3.5.0/js/reveal.js"></script>
+
+  <script>
+
+      // Full list of configuration options available at:
+      // https://github.com/hakimel/reveal.js#configuration
+      Reveal.initialize({
+        // Display controls in the bottom right corner
+        controls: false,
+        // Push each slide change to the browser history
+        history: true,
+        // Vertical centering of slides
+        center: false,
+        // Transition style
+        transition: 'none', // none/fade/slide/convex/concave/zoom
+        // Transition style for full page slide backgrounds
+        backgroundTransition: 'none', // none/fade/slide/convex/concave/zoom
+        // The "normal" size of the presentation, aspect ratio will be preserved
+        // when the presentation is scaled to fit different resolutions. Can be
+        // specified using percentage units.
+        width: 1920,
+        height: 1080,
+
+        // Optional reveal.js plugins
+        dependencies: [
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/lib/js/classList.js', condition: function() { return !document.body.classList; } },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/zoom-js/zoom.js', async: true },
+          { src: 'https://mlouhivu.github.io/static-engine/reveal/3.5.0/plugin/notes/notes.js', async: true }
+        ]
+      });
+    </script>
+    </body>
+</html>
