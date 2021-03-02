@@ -1,4 +1,4 @@
-COMP=cray
+COMP=intel
 
 COMMONDIR=../../common
 LIBPNGDIR=/appl/opt/libpng
@@ -17,7 +17,14 @@ LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
-EXE=heat_hyb
+ifeq ($(COMP),intel)
+CC=mpicc
+CCFLAGS=-O3 -qopenmp -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
+LIBS=-lpng -lz
+endif
+
+EXE=heat_hybrid
 OBJS=core.o setup.o utilities.o io.o main.o
 OBJS_PNG=$(COMMONDIR)/pngwriter.o
 

@@ -1,19 +1,27 @@
-COMP=cray
+COMP=intel
 
 COMMONDIR=../common
+LIBPNGDIR=/appl/opt/libpng
 
 ifeq ($(COMP),cray)
 CC=cc
-CCFLAGS=-O3 -I/appl/opt/libpng/include -I$(COMMONDIR)
-LDFLAGS=-L/appl/opt/libpng/lib
+CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
 ifeq ($(COMP),gnu)
 CC=mpicc
-CCFLAGS=-O3 -Wall -I$(COMMONDIR)
-LDFLAGS=
-LIBS=-lpng
+CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
+LIBS=-lpng -lz
+endif
+
+ifeq ($(COMP),intel)
+CC=mpicc
+CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
+LIBS=-lpng -lz
 endif
 
 EXE=heat_mpi
