@@ -1,4 +1,4 @@
-COMP=cray
+COMP=intel
 
 COMMONDIR=../common
 
@@ -13,6 +13,13 @@ ifeq ($(COMP),gnu)
 CC=mpicc
 CCFLAGS=-O3 -Wall -I$(COMMONDIR) -fopenmp
 LDFLAGS=-fopenmp
+LIBS=-lpng
+endif
+
+ifeq ($(COMP),intel)
+CC=mpicc
+CCFLAGS=-O3 -Wall -I$(COMMONDIR) -qopenmp
+LDFLAGS=-qopenmp
 LIBS=-lpng
 endif
 

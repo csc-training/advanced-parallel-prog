@@ -1,4 +1,4 @@
-COMP=cray
+COMP=intel
 
 COMMONDIR=../common
 
@@ -17,6 +17,15 @@ CC=gcc
 FCFLAGS=-O3 -Wall -fopenmp
 CCFLAGS=-O3 -Wall -I$(COMMONDIR)
 LDFLAGS=-fopenmp
+LIBS=-lpng
+endif
+
+ifeq ($(COMP),intel)
+FC=mpif90
+CC=icc
+FCFLAGS=-O3 -qopenmp
+CCFLAGS=-O3 -I$(COMMONDIR)
+LDFLAGS=-qopenmp
 LIBS=-lpng
 endif
 
