@@ -12,7 +12,7 @@ current process. Your program should work as follows:
 - All tasks (except rank 0) receive a message.
 - The message content should be an integer array where each element is
   initialized to *myid*.
-- The sender prints out their rank and the number of elements it sends.
+- Each sender prints out their rank and the number of elements it sends.
 - Each receiver prints out their rank and the first element in the received
   array.
 

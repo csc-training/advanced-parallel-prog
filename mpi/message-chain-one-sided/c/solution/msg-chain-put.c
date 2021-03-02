@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <mpi.h>
 
 
 int main(int argc, char *argv[])
@@ -11,7 +11,7 @@ int main(int argc, char *argv[])
     int *receiveBuffer;
     MPI_Status status;
 
-    MPI_Win rma_window; 
+    MPI_Win rma_window;
 
     double t0, t1;
 
@@ -26,6 +26,11 @@ int main(int argc, char *argv[])
     for (i = 0; i < size; i++)
         message[i] = myid;
 
+    /* Print out the messages to be communicated */
+    if (myid < ntasks - 1) {
+        printf("Sender:   %d   # of elements: %d\n", myid, size);
+    }
+
     /* Create RMA window */
     MPI_Win_create(receiveBuffer, size *  sizeof(int), sizeof(int),
                    MPI_INFO_NULL, MPI_COMM_WORLD, &rma_window);
@@ -34,30 +39,30 @@ int main(int argc, char *argv[])
     MPI_Barrier(MPI_COMM_WORLD);
     t0 = MPI_Wtime();
 
-    /* TODO start */
-    MPI_Win_fence(0, rma_window);
     /* Send and receive messages as defined in exercise */
+    MPI_Win_fence(0, rma_window);
     if (myid < ntasks - 1) {
-        MPI_Put(message, size, MPI_INT, myid + 1, 0, size, MPI_INT, 
+        MPI_Put(message, size, MPI_INT, myid + 1, 0, size, MPI_INT,
                 rma_window);
-        printf("Sender: %d. Sent elements: %d. Tag: %d. Receiver: %d\n",
-               myid, size, myid + 1, myid + 1);
     }
-
     MPI_Win_fence(0, rma_window);
 
+    /* Print out the messages that were communicated */
     if (myid > 0) {
-        printf("Receiver: %d. first element %d.\n",
-               myid, receiveBuffer[0]);
+        printf("Receiver: %d   first element: %d\n", myid, receiveBuffer[0]);
     }
 
-    /* TODO end */
-
-    /* Finalize measuring the time and print it out */
+    /* Stop measuring the time */
     t1 = MPI_Wtime();
+
+    /* Print out the messages that were communicated */
+    if (myid > 0) {
+        printf("Receiver: %d   first element: %d\n", myid, receiveBuffer[0]);
+    }
+
+    /* Print out the time spent in communication */
     MPI_Barrier(MPI_COMM_WORLD);
     fflush(stdout);
-
     printf("Time elapsed in rank %2d: %6.3f\n", myid, t1 - t0);
 
     free(message);

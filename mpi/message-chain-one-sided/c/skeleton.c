@@ -1,6 +1,6 @@
-#include<stdio.h>
-#include<stdlib.h>
-#include<mpi.h>
+#include <stdio.h>
+#include <stdlib.h>
+#include <mpi.h>
 
 
 int main(int argc, char *argv[])
@@ -24,31 +24,28 @@ int main(int argc, char *argv[])
     for (i = 0; i < size; i++)
         message[i] = myid;
 
+    /* Print out the messages to be communicated */
+    if (myid < ntasks - 1) {
+        printf("Sender:   %d   # of elements: %d\n", myid, size);
+    }
+
     /* Start measuring the time spend in communication */
     MPI_Barrier(MPI_COMM_WORLD);
     t0 = MPI_Wtime();
 
-    /* TODO start */
-    /* Send and receive messages as defined in exercise */
-    if (myid < ntasks - 1) {
+    /* TODO: Send and receive messages as defined in the assignment */
 
-        printf("Sender: %d. Sent elements: %d. Tag: %d. Receiver: %d\n",
-               myid, size, myid + 1, myid + 1);
-    }
-
-    if (myid > 0) {
-
-        printf("Receiver: %d. first element %d.\n",
-               myid, receiveBuffer[0]);
-    }
-
-    /* TODO end */
-
-    /* Finalize measuring the time and print it out */
+    /* Stop measuring the time */
     t1 = MPI_Wtime();
+
+    /* Print out the messages that were communicated */
+    if (myid > 0) {
+        printf("Receiver: %d   first element: %d\n", myid, receiveBuffer[0]);
+    }
+
+    /* Print out the time spent in communication */
     MPI_Barrier(MPI_COMM_WORLD);
     fflush(stdout);
-
     printf("Time elapsed in rank %2d: %6.3f\n", myid, t1 - t0);
 
     free(message);
