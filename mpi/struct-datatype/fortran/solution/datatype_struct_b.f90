@@ -15,6 +15,7 @@ program datatype_struct
   integer:: types(cnt),blocklen(cnt)
   integer(KIND=MPI_ADDRESS_KIND) :: disp(cnt)
   integer(KIND=MPI_ADDRESS_KIND) :: lb1, lb2, extent
+  integer :: nbytes
   real(8) :: t1,t2
 
   call MPI_INIT(ierror)
@@ -37,14 +38,15 @@ program datatype_struct
 
   t1=MPI_WTIME()
   ! send and receive using the MPI_BYTE datatype
+  nbytes = n * extent
   if(myid == 0) then
      do i=1,1000
-        call MPI_SEND(particles, n*extent, MPI_BYTE, 1, i, &
+        call MPI_SEND(particles, nbytes, MPI_BYTE, 1, i, &
              MPI_COMM_WORLD,ierror)
      end do
   else if(myid == 1) then
      do i=1, 1000
-        call MPI_RECV(particles, n*extent, MPI_BYTE, 0, i, &
+        call MPI_RECV(particles, nbytes, MPI_BYTE, 0, i, &
              MPI_COMM_WORLD, MPI_STATUS_IGNORE, ierror)
      end do
   end if

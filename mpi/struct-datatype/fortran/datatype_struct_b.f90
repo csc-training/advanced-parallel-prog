@@ -15,6 +15,7 @@ program datatype_struct
   integer:: types(cnt),blocklen(cnt)
   integer(KIND=MPI_ADDRESS_KIND) :: disp(cnt)
   integer(KIND=MPI_ADDRESS_KIND) :: lb1, lb2, extent
+  integer :: nbytes
   real(8) :: t1,t2
 
   call MPI_INIT(ierror)
@@ -36,6 +37,7 @@ program datatype_struct
 
   t1=MPI_WTIME()
   ! TODO: send and receive using the MPI_BYTE type
+  nbytes = n * extent
   if(myid == 0) then
      do i=1,1000
 !        call MPI_SEND(...
