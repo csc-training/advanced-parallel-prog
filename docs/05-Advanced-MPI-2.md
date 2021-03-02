@@ -64,7 +64,7 @@ lang:   en
 
 
 ```fortran
-integer, parameter :: n=3, m=3
+integer, parameter :: n=3, m=4
 real, dimension(n,m) :: a
 integer :: rowtype
 
