@@ -1,4 +1,8 @@
 ## Simple MPI-IO
 
-Modify the [Posix I/O exercise](../posix/) in such a way that all MPI tasks
-participate in the writing to (and reading from) a single file using MPI-IO.
+Implement parallel I/O in a test code using MPI-IO.
+
+Write data from all MPI tasks to a single output file using MPI-IO. Each task
+should write their own local part of the data directly to the correct position
+in the file. Skeleton code to start from is available in `skeleton.c` (or
+`skeleton.F90`).
