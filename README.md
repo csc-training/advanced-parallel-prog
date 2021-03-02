@@ -25,7 +25,7 @@ Programming". The course is part of PRACE Advanced Training Center
  - [Cartesian grid process topology](mpi/cartesian-grid)
  - [Datatype for a struct / derived type](mpi/struct-datatype)
  - [2D-decomposed heat equation](mpi/heat-2d)
- - [One-sided communication in message chain](mpi/message-chain-one-sided)
+ - [One-sided communication in a message chain](mpi/message-chain-one-sided)
  - [One-sided communication in the heat equation solver](mpi/heat-one-sided)
 
 ### Parallel I/O
