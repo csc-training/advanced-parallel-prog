@@ -9,7 +9,7 @@ CC=cc
 FCFLAGS=-O3
 CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
-LIBS=-lpng -lz
+LIBS=-lpng -lz -lm
 endif
 
 ifeq ($(COMP),gnu)
@@ -18,7 +18,7 @@ CC=gcc
 FCFLAGS=-O3 -Wall
 CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
-LIBS=-lpng -lz
+LIBS=-lpng -lz -lm
 endif
 
 ifeq ($(COMP),intel)
@@ -27,7 +27,7 @@ CC=icc
 FCFLAGS=-O3
 CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
-LIBS=-lpng -lz
+LIBS=-lpng -lz -lm
 endif
 
 EXE=heat_mpi
