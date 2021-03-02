@@ -10,7 +10,7 @@ program hello
 
     !$omp parallel private(tid)
     tid = omp_get_thread_num()
-    write(*,'(A,I2,A,I2)') "I'm thread ", my_id, ' in process ', tid
+    write(*,'(A,I2,A,I2)') "I'm thread ", tid, ' in process ', my_id
     !$omp end parallel
 
     if (my_id == 0) then
