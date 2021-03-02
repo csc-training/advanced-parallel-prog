@@ -15,8 +15,8 @@ endif
 ifeq ($(COMP),gnu)
 FC=mpif90
 CC=gcc
-FCFLAGS=-O3
-CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+FCFLAGS=-O3 -Wall
+CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif

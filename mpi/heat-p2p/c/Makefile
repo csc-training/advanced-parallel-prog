@@ -19,7 +19,7 @@ endif
 
 ifeq ($(COMP),intel)
 CC=mpicc
-CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif

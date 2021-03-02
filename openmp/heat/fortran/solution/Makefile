@@ -1,23 +1,33 @@
-COMP=cray
+COMP=intel
 
 COMMONDIR=../../common
+LIBPNGDIR=/appl/opt/libpng
 
 ifeq ($(COMP),cray)
 FC=ftn
 CC=cc
-FCFLAGS=-O3 
-CCFLAGS=-O3 -I/appl/opt/libpng/include -I$(COMMONDIR)
-LDFLAGS=-L/appl/opt/libpng/lib
+FCFLAGS=-O3
+CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
 ifeq ($(COMP),gnu)
 FC=gfortran
 CC=gcc
-FCFLAGS=-fopenmp -O3 -Wall 
-CCFLAGS=-fopenmp -O3 -Wall -I$(COMMONDIR)
-LDFLAGS=
-LIBS=-lpng
+FCFLAGS=-O3 -fopenmp -Wall
+CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
+LIBS=-lpng -lz
+endif
+
+ifeq ($(COMP),intel)
+FC=ifort
+CC=icc
+FCFLAGS=-O3 -qopenmp
+CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+LDFLAGS=-L$(LIBPNGDIR)/lib
+LIBS=-lpng -lz
 endif
 
 EXE=heat_omp
@@ -30,7 +40,7 @@ all: $(EXE)
 $(COMMONDIR)/pngwriter.o: $(COMMONDIR)/pngwriter.c $(COMMONDIR)/pngwriter.h
 core.o: core.F90 heat_mod.o
 utilities.o: utilities.F90 heat_mod.o
-io.o: io.F90 heat_mod.o pngwriter_mod.o 
+io.o: io.F90 heat_mod.o pngwriter_mod.o
 setup.o: setup.F90 heat_mod.o utilities.o io.o
 pngwriter_mod.o: pngwriter_mod.F90 heat_mod.o
 main.o: main.F90 heat_mod.o core.o io.o setup.o utilities.o
