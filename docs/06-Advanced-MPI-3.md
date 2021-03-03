@@ -222,18 +222,17 @@ lang:   en
 ```c
 int data;
 MPI_Win window;
-
 ...
-
 data = rank;
-// Create window
+
 MPI_Win_create(&data, sizeof(int), sizeof(int), MPI_INFO_NULL,
                MPI_COMM_WORLD, &window);
 
 ...
 MPI_Win_fence(0, window);
 if (rank == 0)
-    MPI_Put(&data, 1, MPI_INT, 1, 0, 1, MPI_INT, window);
+    /* transfer data to rank 8 */
+    MPI_Put(&data, 1, MPI_INT, 8, 0, 1, MPI_INT, window);
 MPI_Win_fence(0, window);
 ...
 
