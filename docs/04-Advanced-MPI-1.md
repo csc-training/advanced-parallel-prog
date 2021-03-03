@@ -58,7 +58,7 @@ lang:   en
   : `rank`{.input}
     : rank to convert
   : `maxdim`{.input}
-    : dimension of coords
+    : length of the coords vector
   : `coords`{.output}
     : coordinates in Cartesian topology that corresponds to rank
 
