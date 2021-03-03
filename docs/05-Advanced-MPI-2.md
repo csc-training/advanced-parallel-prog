@@ -110,6 +110,7 @@ call mpi_type_free(rowtype, ierr)
 
 </div>
 
+
 # Understanding datatypes: typemap
 
 - A datatype is defined by a typemap
@@ -121,15 +122,13 @@ call mpi_type_free(rowtype, ierr)
 
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT
 
-- The most_general_type_constructor, creates a new type from heterogeneous
-  blocks
-    - E.g. Fortran types and C structures
-    - Input is the typemap
+- The most general type constructor; it creates a new type from
+  heterogeneous blocks
+    - e.g. Fortran types and C structures
+    - input is used to generate a correct typemap
 
-```fortran
-count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
-```
 ![](img/type-struct.png)
+
 
 # Datatype constructors: MPI_TYPE_CREATE_STRUCT {.split-definition}
 
@@ -149,8 +148,8 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
     `newtype`{.output}
     : new datatype
 
-    `-` {.ghost}
-    : `-` {.ghost}
+    `-`{.ghost}
+    : `-`{.ghost}
 
 ![](img/type-struct.png)
 
@@ -160,14 +159,14 @@ count=3, blocklens=(/2,2,1/), disps=(/0,3,9/)
 /* Structure for particles */
 struct ParticleStruct {
     int charge;         /* particle charge */
-    double coord[3];    /* particle coords */
-    double velocity[3]; /* particle velocity vector components */
+    double coord[3];    /* particle coordinates */
+    double velocity[3]; /* particle velocity vector */
 };
 struct ParticleStruct particle[1000];
 MPI_Datatype Particletype;
 MPI_Datatype type[3]={MPI_INT, MPI_DOUBLE, MPI_DOUBLE};
 int blocklen[3]={1,3,3};
-MPI_Aint disp[3]={0, sizeof(double), 4*sizeof(double)};
+MPI_Aint disp[3]={0, sizeof(double), 4 * sizeof(double)};
 ...
 
 MPI_Type_create_struct(3, blocklen, disp, type, &Particletype);
@@ -186,7 +185,7 @@ MPI_Type_free(&Particletype);
 
 `MPI_Get_address(pointer, address)`
   : `pointer`{.input}
-    : variable (pointer to it) which address to determine
+    : pointer to the variable of interest
 
     `address`{.output}
     : address of the variable, type is
@@ -200,9 +199,9 @@ MPI_Type_free(&Particletype);
 ```c
 /* Structure for particles */
 struct ParticleStruct {
-    int charge;         /* particle charge*/
-    double coords[3];   /* particle coords */
-    double velocity[3]; /* particle velocity vector components */
+    int charge;         /* particle charge */
+    double coords[3];   /* particle coordinates */
+    double velocity[3]; /* particle velocity vector */
 };
 
 struct ParticleStruct particle[1000];
@@ -237,10 +236,10 @@ disp[0] = 0;
 
 - Sending multiple user-defined types at once may not behave as expected
 - The *lower bound* describes where the datatype starts
-    - LB: min(dispj)
+    - LB: min(displacement)
 - The *extent* describes the stride at which contiguous elements are read
   or written when sending multiple elements
-    - extent = max(dispj + sizej) – LB + padding
+    - extent = max(displacement + size) - LB + padding
 
 
 # Multiple MPI_TYPE_VECTORs
