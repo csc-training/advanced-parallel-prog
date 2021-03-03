@@ -4,7 +4,7 @@
   <meta charset="utf-8">
   <meta name="generator" content="pandoc">
   <meta name="author" content="CSC Training">
-  <title>Advanced User-defined datatypes</title>
+  <title>Advanced user-defined datatypes</title>
   <meta name="apple-mobile-web-app-capable" content="yes">
   <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
   <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no, minimal-ui">
@@ -66,8 +66,8 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
     <div class="slides">
 
 <section class="slide level1 title-slide" data-background-size="contain" data-background="theme/csc-2016/img/title-en.png">
-  <h1>Advanced User-defined datatypes</h1>
-  <p>CSC Training, 2019-02</p>
+  <h1>Advanced user-defined datatypes</h1>
+  <p>CSC Training, 2021-03</p>
 </section>
 
 <section id="mpi-datatypes" class="slide level1" data-background-size="contain">
@@ -98,7 +98,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <ul>
 <li>Code is more compact and maintainable</li>
 </ul></li>
-<li>Needed for getting the most out of MPI I/O</li>
+<li>Needed for getting the most out of MPI-IO</li>
 </ul>
 </section>
 <section id="user-defined-datatypes-1" class="slide level1" data-background-size="contain">
@@ -143,7 +143,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <figure>
 <img src="img/fortran-array-layout.png" />
 </figure>
-<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="dt">integer</span>, <span class="dt">parameter</span> <span class="dt">::</span> n<span class="kw">=</span><span class="dv">3</span>, m<span class="kw">=</span><span class="dv">3</span>
+<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="dt">integer</span>, <span class="dt">parameter</span> <span class="dt">::</span> n<span class="kw">=</span><span class="dv">3</span>, m<span class="kw">=</span><span class="dv">4</span>
 <span class="dt">real</span>, <span class="dt">dimension(n,m)</span> <span class="dt">::</span> a
 <span class="dt">integer</span> <span class="dt">::</span> rowtype
 
@@ -205,13 +205,12 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section id="datatype-constructors-mpi_type_create_struct" class="slide level1" data-background-size="contain">
 <h1>Datatype constructors: MPI_TYPE_CREATE_STRUCT</h1>
 <ul>
-<li>The most_general_type_constructor, creates a new type from heterogeneous blocks
+<li>The most general type constructor; it creates a new type from heterogeneous blocks
 <ul>
-<li>E.g. Fortran types and C structures</li>
-<li>Input is the typemap</li>
+<li>e.g. Fortran types and C structures</li>
+<li>input is used to generate a correct typemap</li>
 </ul></li>
 </ul>
-<div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="fu">count</span><span class="kw">=</span><span class="dv">3</span>, blocklens<span class="kw">=(/</span><span class="dv">2</span>,<span class="dv">2</span>,<span class="dv">1</span><span class="kw">/)</span>, disps<span class="kw">=(/</span><span class="dv">0</span>,<span class="dv">3</span>,<span class="dv">9</span><span class="kw">/)</span></code></pre></div>
 <figure>
 <img src="img/type-struct.png" />
 </figure>
@@ -233,7 +232,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dt><code class="input">types</code></dt>
 <dd>types of blocks (array)
 </dd>
-<dt><code class="input">newtype</code></dt>
+<dt><code class="output">newtype</code></dt>
 <dd>new datatype
 </dd>
 <dt><code class="ghost">-</code></dt>
@@ -249,20 +248,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <section id="example-sending-a-c-struct" class="slide level1" data-background-size="contain">
 <h1>Example: sending a C struct</h1>
 <div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">/* Structure for particles */</span>
-
 <span class="kw">struct</span> ParticleStruct {
     <span class="dt">int</span> charge;         <span class="co">/* particle charge */</span>
-    <span class="dt">double</span> coord[<span class="dv">3</span>];    <span class="co">/* particle coords */</span>
-    <span class="dt">double</span> velocity[<span class="dv">3</span>]; <span class="co">/* particle velocity vector components */</span>
+    <span class="dt">double</span> coord[<span class="dv">3</span>];    <span class="co">/* particle coordinates */</span>
+    <span class="dt">double</span> velocity[<span class="dv">3</span>]; <span class="co">/* particle velocity vector */</span>
 };
-
 <span class="kw">struct</span> ParticleStruct particle[<span class="dv">1000</span>];
 MPI_Datatype Particletype;
-
 MPI_Datatype type[<span class="dv">3</span>]={MPI_INT, MPI_DOUBLE, MPI_DOUBLE};
 <span class="dt">int</span> blocklen[<span class="dv">3</span>]={<span class="dv">1</span>,<span class="dv">3</span>,<span class="dv">3</span>};
-MPI_Aint disp[<span class="dv">3</span>]={<span class="dv">0</span>, <span class="kw">sizeof</span>(<span class="dt">double</span>), <span class="dv">4</span>*<span class="kw">sizeof</span>(<span class="dt">double</span>)};
-
+MPI_Aint disp[<span class="dv">3</span>]={<span class="dv">0</span>, <span class="kw">sizeof</span>(<span class="dt">double</span>), <span class="dv">4</span> * <span class="kw">sizeof</span>(<span class="dt">double</span>)};
 ...
 
 MPI_Type_create_struct(<span class="dv">3</span>, blocklen, disp, type, &amp;Particletype);
@@ -282,7 +277,7 @@ MPI_Type_free(&amp;Particletype);</code></pre></div>
 <dt><code>MPI_Get_address(pointer, address)</code></dt>
 <dd><dl>
 <dt><code class="input">pointer</code></dt>
-<dd>variable (pointer to it) which address to determine
+<dd>pointer to the variable of interest
 </dd>
 <dt><code class="output">address</code></dt>
 <dd><p>address of the variable, type is</p>
@@ -299,9 +294,9 @@ MPI_Type_free(&amp;Particletype);</code></pre></div>
 <h1>Determining displacements</h1>
 <div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="co">/* Structure for particles */</span>
 <span class="kw">struct</span> ParticleStruct {
-    <span class="dt">int</span> charge;         <span class="co">/* particle charge*/</span>
-    <span class="dt">double</span> coords[<span class="dv">3</span>];   <span class="co">/* particle coords */</span>
-    <span class="dt">double</span> velocity[<span class="dv">3</span>]; <span class="co">/* particle velocity vector components */</span>
+    <span class="dt">int</span> charge;         <span class="co">/* particle charge */</span>
+    <span class="dt">double</span> coords[<span class="dv">3</span>];   <span class="co">/* particle coordinates */</span>
+    <span class="dt">double</span> velocity[<span class="dv">3</span>]; <span class="co">/* particle velocity vector */</span>
 };
 
 <span class="kw">struct</span> ParticleStruct particle[<span class="dv">1000</span>];
@@ -315,9 +310,7 @@ MPI_Get_address(&amp;particle[<span class="dv">0</span>].velocity, &amp;disp[<sp
 <span class="co">/* Make displacements relative */</span>
 disp[<span class="dv">2</span>] -= disp[<span class="dv">0</span>];
 disp[<span class="dv">1</span>] -= disp[<span class="dv">0</span>];
-disp[<span class="dv">0</span>] = <span class="dv">0</span>;
-
-...</code></pre></div>
+disp[<span class="dv">0</span>] = <span class="dv">0</span>;</code></pre></div>
 </section>
 <section id="gaps-between-datatypes" class="slide level1" data-background-size="contain">
 <h1>Gaps between datatypes</h1>
@@ -339,11 +332,11 @@ disp[<span class="dv">0</span>] = <span class="dv">0</span>;
 <li>Sending multiple user-defined types at once may not behave as expected</li>
 <li>The <em>lower bound</em> describes where the datatype starts
 <ul>
-<li>LB: min(dispj)</li>
+<li>LB: min(displacement)</li>
 </ul></li>
 <li>The <em>extent</em> describes the stride at which contiguous elements are read or written when sending multiple elements
 <ul>
-<li>extent = max(dispj + sizej) – LB + padding</li>
+<li>extent = max(displacement + size) - LB + padding</li>
 </ul></li>
 </ul>
 </section>
@@ -406,16 +399,16 @@ MPI_Aint lb, extent;
 
 ...
 
-<span class="co">/* Check that the extent is correct</span>
-<span class="co">MPI_Type_get_extent(particletype, &amp;lb, &amp;extent);</span>
-<span class="co">if ( extent != sizeof(particle[0] ) {</span>
-<span class="co">    oldtype = particletype;</span>
-<span class="co">    MPI_Type_create_resized(oldtype, 0, sizeof(particle[0]), &amp;particletype);</span>
-<span class="co">    MPI_Type_commit(&amp;particletype);</span>
-<span class="co">    MPI_Type_free(&amp;oldtype);</span>
-<span class="co">}</span>
+<span class="co">/* Check that the extent is correct */</span>
+MPI_Type_get_extent(particletype, &amp;lb, &amp;extent);
+<span class="cf">if</span> ( extent != <span class="kw">sizeof</span>(particle[<span class="dv">0</span>] ) {
+    oldtype = particletype;
+    MPI_Type_create_resized(oldtype, <span class="dv">0</span>, <span class="kw">sizeof</span>(particle[<span class="dv">0</span>]), &amp;particletype);
+    MPI_Type_commit(&amp;particletype);
+    MPI_Type_free(&amp;oldtype);
+}
 
-<span class="co">...</span></code></pre></div>
+...</code></pre></div>
 </section>
 <section id="other-ways-of-communicating-non-uniform-data" class="slide level1" data-background-size="contain">
 <h1>Other ways of communicating non-uniform data</h1>
@@ -423,7 +416,6 @@ MPI_Aint lb, extent;
 <span class="dt">int</span> psize;
 
 psize = <span class="kw">sizeof</span>(particle[<span class="dv">0</span>]);
-
 MPI_Send(particle, <span class="dv">1000</span>*psize, MPI_BYTE, ...);</code></pre></div>
 <ul>
 <li>Non-contiguous data by manual packing

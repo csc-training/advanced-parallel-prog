@@ -67,7 +67,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 
 <section class="slide level1 title-slide" data-background-size="contain" data-background="theme/csc-2016/img/title-en.png">
   <h1>MPI-IO</h1>
-  <p>CSC Training, 2019-02</p>
+  <p>CSC Training, 2021-03</p>
 </section>
 
 <section id="mpi-io" class="slide level1" data-background-size="contain">
@@ -130,7 +130,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dd>communicator that performs parallel I/O
 </dd>
 <dt><code class="input">mode</code></dt>
-<dd><p><code>MPI_MODE_RDONLY</code>, <code>MPI_MODE_WRONLY</code>, <code>I_MODE_CREATE</code>, <code>MPI_MODE_RDWR</code>, ...</p>
+<dd><p><code>MPI_MODE_RDONLY</code>, <code>MPI_MODE_WRONLY</code>, <code>MPI_MODE_CREATE</code>, <code>MPI_MODE_RDWR</code>, ...</p>
 <ul>
 <li>Mode parameters can be combined with + in Fortran and | in C/C++</li>
 </ul>
@@ -166,7 +166,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <dd>datatype of elements to write
 </dd>
 <dt><code class="output">status</code></dt>
-<dd>similar to status in MPI_Recv, stores number of elements actually written
+<dd>similar to status in <code>MPI_Recv</code>, stores number of elements actually written
 </dd>
 </dl>
 </dd>
@@ -198,16 +198,16 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Example: parallel write</h1>
 <div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran">...
 
-<span class="kw">call</span> mpi_file_open(mpi_comm_world, <span class="st">&#39;test&#39;</span>, <span class="kw">&amp;</span>
+<span class="kw">call</span> mpi_file_<span class="fu">open(</span>mpi_comm_world, <span class="st">&#39;test&#39;</span>, <span class="kw">&amp;</span>
                    mpi_mode_create <span class="kw">+</span> mpi_mode_wronly, <span class="kw">&amp;</span>
-                   mpi_info_null, file, err)
+                   mpi_info_null, <span class="fu">file</span>, <span class="fu">err)</span>
 
 intsize <span class="kw">=</span> sizeof(<span class="fu">count</span>)
 disp <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">count</span> <span class="kw">*</span> intsize
 
-<span class="kw">call</span> mpi_file_write_at(file, disp, buf, <span class="fu">count</span>, mpi_integer, status, err)
+<span class="kw">call</span> mpi_file_write_at(file, disp, buf, <span class="fu">count</span>, mpi_<span class="dt">integer</span>, status, err)
 
-<span class="kw">call</span> mpi_file_close(file, err)
+<span class="kw">call</span> mpi_file_<span class="fu">close(file</span>, <span class="fu">err)</span>
 <span class="kw">call</span> mpi_finalize(err)
 
 <span class="kw">end program</span> output</code></pre></div>
@@ -230,7 +230,7 @@ disp <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">c
 <dd>datatype of elements to read
 </dd>
 <dt><code class="output">status</code></dt>
-<dd>similar to status in MPI_Recv, stores number of elements actually read
+<dd>similar to status in <code>MPI_Recv</code>, stores number of elements actually read
 </dd>
 </dl>
 </dd>
@@ -388,10 +388,10 @@ disp <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">c
 <dt><code class="input">datarep</code></dt>
 <dd>Data representation (can be adjusted for portability)
 </dd>
-<dd>&quot;native&quot;: store in same format as in memory
+<dd><code>&quot;native&quot;</code>: store in same format as in memory
 </dd>
 <dt><code class="input">info</code></dt>
-<dd>Hints for implementation that can improve performance <code>MPI_INFO_NULL</code>: No hints
+<dd>Hints for implementation that can improve performance (<code>MPI_INFO_NULL</code>: no hints)
 </dd>
 </dl>
 </dd>
@@ -425,18 +425,18 @@ disp <span class="kw">=</span> myid <span class="kw">*</span> <span class="fu">c
 </figure>
 <div class="sourceCode"><pre class="sourceCode fortran"><code class="sourceCode fortran"><span class="dt">integer</span>, <span class="dt">dimension(2,2)</span> <span class="dt">::</span> array
 ...
-<span class="kw">call</span> mpi_type_create_subarray(<span class="dv">2</span>, sizes, subsizes, starts, mpi_integer, <span class="kw">&amp;</span>
+<span class="kw">call</span> mpi_type_create_subarray(<span class="dv">2</span>, sizes, subsizes, starts, mpi_<span class="dt">integer</span>, <span class="kw">&amp;</span>
                               mpi_order_c, filetype, err)
 <span class="kw">call</span> mpi_type_commit(filetype)
 
 disp <span class="kw">=</span> <span class="dv">0</span>
-<span class="kw">call</span> mpi_file_set_view(file, disp, mpi_integer, filetype, <span class="st">&#39;native&#39;</span>, <span class="kw">&amp;</span>
+<span class="kw">call</span> mpi_file_set_view(file, disp, mpi_<span class="dt">integer</span>, filetype, <span class="st">&#39;native&#39;</span>, <span class="kw">&amp;</span>
                        mpi_info_null, err)
 
-<span class="kw">call</span> mpi_file_write_all(file, buffer, <span class="fu">count</span>, mpi_integer, status, err)</code></pre></div>
+<span class="kw">call</span> mpi_file_write_all(file, buffer, <span class="fu">count</span>, mpi_<span class="dt">integer</span>, status, err)</code></pre></div>
 </section>
 <section id="common-mistakes-with-mpi-io" class="slide level1" data-background-size="contain">
-<h1>Common mistakes with MPI I/O</h1>
+<h1>Common mistakes with MPI-IO</h1>
 <ul>
 <li>Not defining file offsets as <code>MPI_Offset</code> in C and integer (<code>kind=MPI_OFFSET_KIND</code>) in Fortran</li>
 <li>In Fortran, passing the offset or displacement directly as a constant (e.g. &quot;0&quot;)

@@ -118,7 +118,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <li>Windows may be different in different processes</li>
 </ul>
 <figure>
-<img src="img/one-sided-window.png" />
+<img src="img/one-sided-window.png" class="center" />
 </figure>
 </section>
 <section id="data-movement-operations" class="slide level1" data-background-size="contain">
@@ -179,7 +179,7 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 </section>
 <section id="key-mpi-functions-for-one-sided-communication" class="slide level1 section-slide" data-background-size="contain" data-background="theme/default/img/section.png">
-<h1>Key MPI functions for ONE-sided communication</h1>
+<h1>Key MPI functions for one-sided communication</h1>
 </section>
 <section id="creating-an-window" class="slide level1 split-definition" data-background-size="contain">
 <h1>Creating an window</h1>
@@ -339,18 +339,17 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 <h1>Simple example: Put</h1>
 <div class="sourceCode"><pre class="sourceCode c"><code class="sourceCode c"><span class="dt">int</span> data;
 MPI_Win window;
-
 ...
-
 data = rank;
-<span class="co">// Create window</span>
+
 MPI_Win_create(&amp;data, <span class="kw">sizeof</span>(<span class="dt">int</span>), <span class="kw">sizeof</span>(<span class="dt">int</span>), MPI_INFO_NULL,
                MPI_COMM_WORLD, &amp;window);
 
 ...
 MPI_Win_fence(<span class="dv">0</span>, window);
 <span class="cf">if</span> (rank == <span class="dv">0</span>)
-    MPI_Put(&amp;data, <span class="dv">1</span>, MPI_INT, <span class="dv">1</span>, <span class="dv">0</span>, <span class="dv">1</span>, MPI_INT, window);
+    <span class="co">/* transfer data to rank 8 */</span>
+    MPI_Put(&amp;data, <span class="dv">1</span>, MPI_INT, <span class="dv">8</span>, <span class="dv">0</span>, <span class="dv">1</span>, MPI_INT, window);
 MPI_Win_fence(<span class="dv">0</span>, window);
 ...
 
@@ -397,7 +396,7 @@ MPI_Win_free(&amp;window);</code></pre></div>
 <li>Origin: Access epoch
 <ul>
 <li>Start: <code>MPI_Win_start</code></li>
-<li>End: <code>MPI_Win_compete</code></li>
+<li>End: <code>MPI_Win_complete</code></li>
 </ul></li>
 </ul>
 </section>
@@ -433,7 +432,9 @@ MPI_Win_free(&amp;window);</code></pre></div>
 </section>
 <section id="osu-benchmark-example" class="slide level1" data-background-size="contain">
 <h1>OSU benchmark example</h1>
-<p>FIXME: missing figure</p>
+<figure>
+<img src="img/osu-benchmark.png" />
+</figure>
 </section>
 <section id="summary" class="slide level1" data-background-size="contain">
 <h1>Summary</h1>
