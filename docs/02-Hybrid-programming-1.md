@@ -109,9 +109,9 @@ int main(int argc, char *argv[]) {
 
 <div class="column">
 ```shell
-$ cc hybrid-hello.c -o hybrid-hello
-$ aprun -n 2 -d 4 -e OMP_NUM_THREADS=4
-  ./hybrid-hello
+$ mpicc -fopenmp hybrid-hello.c -o hybrid-hello
+$ srun --account=yourproject --ntasks=2 --cpus-per-task=4
+ --partition=test ./hybrid-hello
 
 I'm thread 0 in process 0
 I'm thread 0 in process 1
