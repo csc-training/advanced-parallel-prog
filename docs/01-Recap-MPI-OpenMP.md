@@ -1,7 +1,7 @@
 ---
 title:  "Recap: MPI & OpenMP"
 author: CSC Training
-date:   2019-02
+date:   2021-03
 lang:   en
 ---
 
