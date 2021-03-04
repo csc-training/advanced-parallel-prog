@@ -11,7 +11,7 @@ git clone https://github.com/csc-training/advanced-parallel-prog.git
 If you have a GitHub account you can also **Fork** this repository and clone then your fork.
 
 ### Computing servers
-We will use the CSC's Puhti supercomputer. See [here](https://docs.csc.fi/support/tutorials/puhti_quick/) for genera instructins on using Puhti.
+We will use the CSC's Puhti supercomputer. See [here](https://docs.csc.fi/support/tutorials/puhti_quick/) for general instructions on using Puhti.
 
 Log onto Puhti using the provided username and password, for example
 
