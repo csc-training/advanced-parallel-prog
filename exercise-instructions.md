@@ -27,7 +27,7 @@ nano prog.f90
 (`^` in nano's shortcuts refer to **Ctrl** key, *i.e.* in order to save file and exit editor press `Ctrl+X`).
 Also other editors  are available.
 
-In case you have working parallel program development environment in yourlaptop (Fortran or C compiler, MPI development library, etc.) you may also use that.
+In case you have working parallel program development environment in your laptop (Fortran or C compiler, MPI development library, etc.) you may also use that.
 
 ## Compilation and execution
 Compilation of the source codes is performed with the `mpif90` and `mpicc` wrapper commands:
@@ -43,7 +43,7 @@ The wrapper commands include automatically all the flags needed for building MPI
 
 
 ### Batch jobs
-Larger and/or longer runs should be submitted via the batch system. An example batch job script (a text file, let's call it `test_job.sh`) for a MPI job with 4 processes looks like this:
+Larger and/or longer runs should be submitted via the batch system. An example batch job script (a text file, let's call it `job.sh`) for a MPI job with 4 processes looks like this:
 
 ```
 #!/bin/bash
@@ -59,7 +59,7 @@ srun my_mpi_exe
 
 The batch script is then submitted with the sbatch command as
 ```
-sbatch test_job.sh
+sbatch job.sh
 ```
 Replace `<project>` with the project id provided together with your access credentials. Save the script *e.g.* as `job.sh` and submit it with `sbatch job.sh`.  The output of job will be in file `slurm-xxxxx.out`. You can check the status of your jobs with `squeue -u $USER` and kill possible hanging applications with `scancel JOBID`.
 
