@@ -12,18 +12,16 @@ We will use CSC's Cray XC40 supercomputer Sisu for the exercises. Log onto
 Sisu using the provided username and password, for example
 
 ```
-ssh -X training000@sisu.csc.fi
+ssh -X training000@puhti.csc.fi
 ```
 
-For editing program source files you can use e.g. Emacs editor with or without
-(the option -nw) X-Windows:
+For editing program source files you can use e.g. `nano` editor :
 
 ```
-emacs -nw prog.f90
-emacs prog.f90
+nano prog.f90
 ```
 
-Also other popular editors (vim, nano) are available.
+Also other editors  are available.
 In case you have working parallel program development environment in your
 laptop (Fortran or C compiler, MPI development library, etc.) you may also use
 that.
@@ -32,11 +30,11 @@ that.
 Compilation of the source codes is performed with the `ftn` and `cc` wrapper
 commands:
 ```
-ftn -o my_mpi_exe_test.f90
+mpif90 -o my_mpi_exe prog.f90
 ```
 or
 ```
-cc -o my mpi_exe_test.c
+mpicc -o my_mpi_exe prog.c
 ```
 
 The wrapper commands include automatically all the flags needed for building
