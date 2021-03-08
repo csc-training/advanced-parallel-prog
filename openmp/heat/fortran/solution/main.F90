@@ -7,6 +7,8 @@ program heat_solve
   use setup
   use utilities
 
+  use omp_lib
+
   implicit none
 
   real(dp), parameter :: a = 0.5 ! Diffusion constant
@@ -14,11 +16,11 @@ program heat_solve
 
   real(dp) :: dt     ! Time step
   integer :: nsteps       ! Number of time steps
-  integer, parameter :: image_interval = 10 ! Image output interval
+  integer, parameter :: image_interval = 1000 ! Image output interval
 
   integer :: iter
 
-  real :: start, stop ! Timers
+  real(dp) :: start, stop ! Timers
 
   !$OMP PARALLEL PRIVATE(iter)
   call initialize(current, previous, nsteps)
@@ -34,7 +36,8 @@ program heat_solve
   ! Main iteration loop, save a picture every
   ! image_interval steps
 
-  call cpu_time(start)
+  start = omp_get_wtime()
+
   !$OMP END SINGLE
   do iter = 1, nsteps
      call evolve(current, previous, a, dt)
@@ -46,11 +49,14 @@ program heat_solve
      !$OMP END SINGLE
   end do
   !$OMP SINGLE
-  call cpu_time(stop)
+
+  stop = omp_get_wtime()
+
   !$OMP END SINGLE
   !$OMP END PARALLEL
 
   write(*,'(A,F7.3,A)') 'Iteration took ', stop - start, ' seconds.'
+  write(*,'(A,F7.3,A)') 'Iteration took ', stop2 - start2, ' seconds.'
   write(*,'(A,G0)') 'Reference value at 5,5: ', previous % data(5,5)
   
   call finalize(current, previous)

@@ -20,8 +20,8 @@ subroutine initialize(previous, current, nsteps)
 
 
   ! Default values for grid size and time steps
-  rows = 200
-  cols = 200
+  rows = 2000
+  cols = 2000
   nsteps = 500
   using_input_file = .false.
 
