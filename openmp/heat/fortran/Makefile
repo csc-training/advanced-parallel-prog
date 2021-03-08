@@ -1,6 +1,6 @@
 COMP=intel
 
-COMMONDIR=../common
+COMMONDIR=../../common
 LIBPNGDIR=/appl/opt/libpng
 
 ifeq ($(COMP),cray)
@@ -15,7 +15,7 @@ endif
 ifeq ($(COMP),gnu)
 FC=gfortran
 CC=gcc
-FCFLAGS=-O3 -Wall
+FCFLAGS=-O3 -fopenmp -Wall
 CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
@@ -24,13 +24,13 @@ endif
 ifeq ($(COMP),intel)
 FC=ifort
 CC=icc
-FCFLAGS=-O3
+FCFLAGS=-O3 -qopenmp
 CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
-EXE=heat_serial
+EXE=heat_omp
 OBJS=main.o heat_mod.o core.o setup.o utilities.o io.o pngwriter_mod.o
 OBJS_PNG=$(COMMONDIR)/pngwriter.o
 
