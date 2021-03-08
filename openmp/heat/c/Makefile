@@ -1,6 +1,6 @@
 COMP=intel
 
-COMMONDIR=../common
+COMMONDIR=../../common
 LIBPNGDIR=/appl/opt/libpng
 
 ifeq ($(COMP),cray)
@@ -12,19 +12,19 @@ endif
 
 ifeq ($(COMP),gnu)
 CC=mpicc
-CCFLAGS=-O3 -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+CCFLAGS=-O3 -fopenmp -Wall -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
 ifeq ($(COMP),intel)
 CC=mpicc
-CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
+CCFLAGS=-O3 -qopenmp -I$(LIBPNGDIR)/include -I$(COMMONDIR)
 LDFLAGS=-L$(LIBPNGDIR)/lib
 LIBS=-lpng -lz
 endif
 
-EXE=heat_serial
+EXE=heat_omp
 OBJS=core.o setup.o utilities.o io.o main.o
 OBJS_PNG=$(COMMONDIR)/pngwriter.o
 
