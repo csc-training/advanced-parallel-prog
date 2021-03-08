@@ -7,6 +7,7 @@
 
 #include "heat.h"
 
+#include <omp.h>
 
 int main(int argc, char **argv)
 {
@@ -16,13 +17,13 @@ int main(int argc, char **argv)
     double dt;                  //!< Time step
     int nsteps;                 //!< Number of time steps
 
-    int image_interval = 10;    //!< Image output interval
+    int image_interval = 1000;    //!< Image output interval
 
     int iter;                   //!< Iteration counter
 
     double dx2, dy2;            //!< delta x and y squared
 
-    clock_t start_clock;        //!< Time stamps
+    double start_clock, stop_clock;        //!< Time stamps
 
     initialize(argc, argv, &current, &previous, &nsteps);
 
@@ -35,7 +36,7 @@ int main(int argc, char **argv)
     dt = dx2 * dy2 / (2.0 * a * (dx2 + dy2));
 
     /* Get the start time stamp */
-    start_clock = clock();
+    start_clock = omp_get_wtime();
 
     /* Time evolve */
     for (iter = 1; iter <= nsteps; iter++) {
@@ -48,9 +49,10 @@ int main(int argc, char **argv)
         swap_fields(&current, &previous);
     }
 
+    stop_clock = omp_get_wtime();
+
     /* Determine the CPU time used for the iteration */
-    printf("Iteration took %.3f seconds.\n", (double)(clock() - start_clock) /
-        (double)CLOCKS_PER_SEC);
+    printf("Iteration took %.3f seconds.\n", stop_clock - start_clock);
     printf("Reference value at 5,5: %f\n", previous.data[5][5]);
 
     finalize(&current, &previous);

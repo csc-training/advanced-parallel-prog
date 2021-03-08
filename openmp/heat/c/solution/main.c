@@ -7,6 +7,7 @@
 
 #include "heat.h"
 
+#include <omp.h>
 
 int main(int argc, char **argv)
 {
@@ -22,7 +23,7 @@ int main(int argc, char **argv)
 
     double dx2, dy2;            //!< delta x and y squared
 
-    clock_t start_clock;        //!< Time stamps
+    double start_clock, stop_clock;        //!< Time stamps
 
 #pragma omp parallel private(iter)
 {
@@ -39,7 +40,7 @@ int main(int argc, char **argv)
         dt = dx2 * dy2 / (2.0 * a * (dx2 + dy2));
 
         /* Get the start time stamp */
-        start_clock = clock();
+        start_clock = omp_get_wtime();
     }
 
     /* Time evolve */
@@ -56,9 +57,10 @@ int main(int argc, char **argv)
     }
 } /* End of parallel region */
 
+    stop_clock = omp_get_wtime();
+
     /* Determine the CPU time used for the iteration */
-    printf("Iteration took %.3f seconds.\n", (double)(clock() - start_clock) /
-        (double)CLOCKS_PER_SEC);
+    printf("Iteration took %.3f seconds.\n", stop_clock - start_clock);
     printf("Reference value at 5,5: %f\n", previous.data[5][5]);
 
     finalize(&current, &previous);
