@@ -20,8 +20,12 @@ contains
     character(len=85) :: filename
 
     integer :: stat
-    real(dp), dimension(:,:), allocatable, target :: full_data
+    real(dp), dimension(:,:), allocatable :: full_data
+    real(dp), dimension(:,:), allocatable :: buffer ! communication buffer
+
     integer :: p, ierr
+
+    allocate(buffer(curr%nx, curr%ny))
 
     if (parallel%rank == 0) then
        allocate(full_data(curr%nx_full, curr%ny_full))
@@ -30,18 +34,23 @@ contains
 
        ! Receive data from other ranks
        do p = 1, parallel%size - 1
-          call mpi_recv(full_data(1:curr%nx, p*curr%ny + 1:(p + 1) * curr%ny), &
-               & curr%nx * curr%ny, MPI_DOUBLE_PRECISION, p, 22, &
+          ! in order to avoid stack allocation  by compiler we use explicit 
+          ! communication buffer
+          call mpi_recv(buffer, curr%nx * curr%ny, MPI_DOUBLE_PRECISION, p, 22, &
                & MPI_COMM_WORLD, MPI_STATUS_IGNORE, ierr)
+          full_data(1:curr%nx, p*curr%ny + 1:(p + 1) * curr%ny) = buffer(:,:)
        end do
        write(filename,'(A5,I4.4,A4,A)')  'heat_', iter, '.png'
        stat = save_png(full_data, curr%nx_full, curr%ny_full, filename)
        deallocate(full_data)
     else
        ! Send data
-       call mpi_send(curr%data(1:curr%nx, 1:curr%ny), curr%nx * curr%ny, MPI_DOUBLE_PRECISION, 0, 22, &
+       buffer(:,:) = curr%data(1:curr%nx, 1:curr%ny)
+       call mpi_send(buffer, curr%nx * curr%ny, MPI_DOUBLE_PRECISION, 0, 22, &
             & MPI_COMM_WORLD, ierr)
     end if
+
+    deallocate(buffer)
 
   end subroutine write_field
 
