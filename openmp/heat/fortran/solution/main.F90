@@ -56,7 +56,6 @@ program heat_solve
   !$OMP END PARALLEL
 
   write(*,'(A,F7.3,A)') 'Iteration took ', stop - start, ' seconds.'
-  write(*,'(A,F7.3,A)') 'Iteration took ', stop2 - start2, ' seconds.'
   write(*,'(A,G0)') 'Reference value at 5,5: ', previous % data(5,5)
   
   call finalize(current, previous)
