@@ -1,23 +1,13 @@
 COMP=intel
 
 COMMONDIR=../../common
-LIBPNGDIR=/appl/opt/libpng
-
-ifeq ($(COMP),cray)
-FC=ftn
-CC=cc
-FCFLAGS=-O3
-CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
-LDFLAGS=-L$(LIBPNGDIR)/lib
-LIBS=-lpng -lz
-endif
 
 ifeq ($(COMP),gnu)
 FC=mpif90
 CC=gcc
 FCFLAGS=-O3 -fopenmp -Wall
-CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
-LDFLAGS=-L$(LIBPNGDIR)/lib
+CCFLAGS=-O3 -I$(COMMONDIR)
+LDFLAGS=
 LIBS=-lpng -lz
 endif
 
@@ -25,8 +15,8 @@ ifeq ($(COMP),intel)
 FC=mpif90
 CC=icc
 FCFLAGS=-O3 -qopenmp
-CCFLAGS=-O3 -I$(LIBPNGDIR)/include -I$(COMMONDIR)
-LDFLAGS=-L$(LIBPNGDIR)/lib
+CCFLAGS=-O3 -I$(COMMONDIR)
+LDFLAGS=
 LIBS=-lpng -lz
 endif
 
