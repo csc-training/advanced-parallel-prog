@@ -110,8 +110,9 @@ int main(int argc, char *argv[]) {
 <div class="column">
 ```shell
 $ mpicc -fopenmp hybrid-hello.c -o hybrid-hello
-$ srun --account=yourproject --ntasks=2 --cpus-per-task=4
- --partition=test ./hybrid-hello
+$ srun --account=yourproject --ntasks=2
+ --cpus-per-task=4 --partition=test
+ ./hybrid-hello
 
 I'm thread 0 in process 0
 I'm thread 0 in process 1

@@ -170,8 +170,9 @@ code > span.in { color: #60a0b0; font-weight: bold; font-style: italic; } /* Inf
 </div>
 <div class="column">
 <pre class="shell"><code>$ mpicc -fopenmp hybrid-hello.c -o hybrid-hello
-$ srun --account=yourproject --ntasks=2 --cpus-per-task=4
- --partition=test ./hybrid-hello
+$ srun --account=yourproject --ntasks=2
+ --cpus-per-task=4 --partition=test
+ ./hybrid-hello
 
 I&#39;m thread 0 in process 0
 I&#39;m thread 0 in process 1
